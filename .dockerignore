@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.vscode/
+.devcontainer/
+.github/
+run.sh
+.env.example
+LICENSE
+README.md

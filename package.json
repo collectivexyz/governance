@@ -1,0 +1,65 @@
+{
+  "author": "@collective",
+  "version": "0.0.1",
+  "name": "@collective/governance",
+  "engineStrict": true,
+  "license": "BSD-3-Clause",
+  "description": "Governance Library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "packageManager": "yarn@3.2.0",
+  "scripts": {
+    "prettier:check": "prettier --check \"**/*.ts\"",
+    "prettier:fix": "prettier --write \"**/*.ts\" \"**/*.ts\"",
+    "lint": "eslint --ext .ts",
+    "build": "tsc",
+    "prepublishOnly": "yarn build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-markdown": "^2.2.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.0",
+    "pino": "^7.11.0",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "ethers": "5.7.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "testPathIgnorePatterns": [
+      "dist",
+      "node_modules"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/collectivexyz/governance.git"
+  },
+  "bugs": {
+    "url": "https://github.com/collectivexyz/governance/issues"
+  },
+  "homepage": "https://github.com/collectivexyz/governance"
+}
