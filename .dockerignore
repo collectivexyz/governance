@@ -3,7 +3,7 @@ node_modules/
 .vscode/
 .devcontainer/
 .github/
-run.sh
+build.sh
 .env.example
 LICENSE
 README.md

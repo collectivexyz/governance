@@ -30,57 +30,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
+import * as dotenv from 'dotenv';
+import { pino, Logger } from 'pino';
 
-  propose(): Promise<number>;
+dotenv.config();
 
-  choiceVote(choiceCount: number): Promise<number>;
+// config is depending on logger
+const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+export const logger = pino({
+  level: LOG_LEVEL,
+  console: true,
+});
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
-
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
-
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+export class LoggerFactory {
+  static getLogger(name: string): Logger {
+    return logger.child({ module: name });
+  }
 }
-
-export { Governance };

@@ -1,8 +1,9 @@
 FROM public.ecr.aws/docker/library/node:18.12.1-slim
 
+ARG NPM_TOKEN
 ARG PROJECT=collectivexyz_governance
-ARG NPM=8.9.0
 
+ENV NPM_TOKEN=${NPM_TOKEN}
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && \
   apt install -y -q --no-install-recommends \

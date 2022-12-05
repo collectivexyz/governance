@@ -30,57 +30,41 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
+import { ethers } from 'ethers';
 
-  propose(): Promise<number>;
+import { ContractAbi } from './contractabi';
 
-  choiceVote(choiceCount: number): Promise<number>;
+export class System extends ContractAbi {
+  static ABI_NAME = 'System.json';
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
+    super(abiPath, System.ABI_NAME, contractAddress, provider, wallet);
+  }
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
+  async create(name: string, url: string, description: string, erc721contract: string, quorum: number): Promise<string> {
+    this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}`);
+    const encodedName = ethers.utils.formatBytes32String(name);
+    const buildTx = await this.contract.create(encodedName, url, description, erc721contract, quorum);
+    const buildTxReceipt = await buildTx.wait();
+    this.logger.debug(buildTxReceipt);
+    return buildTx.transactionHash;
+  }
 
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
-
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+  async createWithDelay(
+    name: string,
+    url: string,
+    description: string,
+    erc721contract: string,
+    quorum: number,
+    delay: number,
+    duration: number
+  ): Promise<string> {
+    this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}, ${delay}, ${duration}`);
+    const encodedName = ethers.utils.formatBytes32String(name);
+    const buildTx = await this.contract.create(encodedName, url, description, erc721contract, quorum, delay, duration);
+    const buildTxReceipt = await buildTx.wait();
+    this.logger.debug(buildTxReceipt);
+    return buildTx.transactionHash;
+  }
 }
-
-export { Governance };

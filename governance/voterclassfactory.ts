@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: BSD-3-Clause
 /*
  * BSD 3-Clause License
  *
@@ -30,57 +29,30 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
+import { ethers, Event } from 'ethers';
+import { ContractAbi } from './contractabi';
 
-  propose(): Promise<number>;
+export class VoterClassFactory extends ContractAbi {
+  static ABI_NAME = 'VoterClassFactory.json';
 
-  choiceVote(choiceCount: number): Promise<number>;
+  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
+    super(abiPath, VoterClassFactory.ABI_NAME, contractAddress, provider, wallet);
+  }
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+  async createERC721(projectAddress: string, weight: number): Promise<string> {
+    this.logger.debug(`Sending createERC721 to ${projectAddress}`);
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
-
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
-
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+    const tx = await this.contract.createERC721(projectAddress, weight);
+    this.logger.info(tx);
+    const receipt = await tx.wait();
+    const created = receipt.events.find((e: Event) => e.event === 'VoterClassCreated');
+    if (created && created.args) {
+      const classAddress = created.args['voterClass'];
+      if (classAddress) {
+        return classAddress;
+      }
+    }
+    throw new Error('Unknown VoterClass created');
+  }
 }
-
-export { Governance };

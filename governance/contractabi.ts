@@ -30,57 +30,35 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
+import { ethers } from 'ethers';
 
-  propose(): Promise<number>;
+import { loadAbi, pathWithSlash } from '../system/abi';
+import { LoggerFactory } from '../system/logging';
 
-  choiceVote(choiceCount: number): Promise<number>;
+export class ContractAbi {
+  protected readonly logger = LoggerFactory.getLogger(module.filename);
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+  public readonly contractAddress: string;
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
+  protected readonly provider: ethers.providers.Provider;
+  protected readonly wallet: ethers.Wallet;
+  protected readonly contractAbi: any[];
+  protected readonly contract: ethers.Contract;
 
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
-
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+  constructor(
+    abiPath: string,
+    abiName: string,
+    contractAddress: string,
+    provider: ethers.providers.Provider,
+    wallet: ethers.Wallet
+  ) {
+    this.contractAddress = contractAddress;
+    this.provider = provider;
+    this.wallet = wallet;
+    const abiFile = pathWithSlash(abiPath) + abiName;
+    this.logger.info(`Loading ABI: ${abiFile}`);
+    this.contractAbi = loadAbi(abiFile);
+    this.contract = new ethers.Contract(this.contractAddress, this.contractAbi, this.wallet);
+  }
 }
-
-export { Governance };

@@ -30,57 +30,23 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
+
+interface Meta {
   name(): Promise<string>;
 
   version(): Promise<number>;
 
-  propose(): Promise<number>;
+  community(): Promise<string>;
 
-  choiceVote(choiceCount: number): Promise<number>;
+  description(): Promise<string>;
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+  url(): Promise<string>;
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
+  getMetaDescription(proposalId: number): Promise<string>;
 
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
+  getMetaUrl(proposalId: number): Promise<string>;
 
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+  getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }>;
 }
 
-export { Governance };
+export { Meta };

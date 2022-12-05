@@ -30,57 +30,56 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
+import { ethers } from 'ethers';
 
-  propose(): Promise<number>;
+import { ContractAbi } from './contractabi';
+import { Meta } from './meta';
 
-  choiceVote(choiceCount: number): Promise<number>;
+export class MetaStorage extends ContractAbi implements Meta {
+  static ABI_NAME = 'MetaStorage.json';
 
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
+  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
+    super(abiPath, MetaStorage.ABI_NAME, contractAddress, provider, wallet);
+  }
 
-  describe(proposalId: number, description: string, url: string): Promise<void>;
+  async name(): Promise<string> {
+    const name = await this.contract.name();
+    return name;
+  }
 
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
+  async version(): Promise<number> {
+    const version = await this.contract.version();
+    return parseInt(version);
+  }
 
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
+  async community(): Promise<string> {
+    const communityHexEnc = await this.contract.community();
+    const community = ethers.utils.parseBytes32String(communityHexEnc);
+    return community;
+  }
 
-  configure(proposalId: number, quorum: number): Promise<void>;
+  async description(): Promise<string> {
+    const description = await this.contract.description();
+    return description;
+  }
 
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
+  async url(): Promise<string> {
+    const description = await this.contract.url();
+    return description;
+  }
 
-  isOpen(proposalId: number): Promise<boolean>;
+  async getMetaDescription(proposalId: number): Promise<string> {
+    return await this.contract.description(proposalId);
+  }
 
-  startVote(proposalId: number): Promise<void>;
+  async getMetaUrl(proposalId: number): Promise<string> {
+    return await this.contract.url(proposalId);
+  }
 
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+  async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
+    const metaData = await this.contract.getMeta(proposalId, metaId);
+    const decodedName = ethers.utils.parseBytes32String(metaData[0]);
+    return { name: decodedName, value: metaData[1] };
+  }
 }
-
-export { Governance };

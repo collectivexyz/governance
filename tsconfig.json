@@ -5,21 +5,11 @@
     "module": "commonjs",
     "target": "es2021",
     "allowSyntheticDefaultImports": true,
-    "lib": [
-      "es2017",
-      "es7",
-      "es6",
-      "dom"
-    ],
+    "lib": ["es2021", "dom"],
     "declaration": true,
     "moduleResolution": "node",
     "strict": true
   },
   "esModuleInterop": true,
-  "exclude": [
-    "**/*.d.ts",
-    "node_modules",
-    "dist",
-    "example"
-  ]
+  "exclude": ["**/*.d.ts", "**/__test__", "node_modules", "dist"]
 }

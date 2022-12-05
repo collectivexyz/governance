@@ -30,57 +30,34 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-interface Governance {
-  name(): Promise<string>;
 
-  version(): Promise<number>;
-
-  propose(): Promise<number>;
-
-  choiceVote(choiceCount: number): Promise<number>;
-
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
-
-  describe(proposalId: number, description: string, url: string): Promise<void>;
-
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
-
-  attachTransaction(
-    proposalId: number,
-    target: string,
-    value: number,
-    signature: string,
-    calldata: string,
-    etaOfLock: number
-  ): Promise<number>;
-
-  configure(proposalId: number, quorum: number): Promise<void>;
-
-  configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void>;
-
-  isOpen(proposalId: number): Promise<boolean>;
-
-  startVote(proposalId: number): Promise<void>;
-
-  endVote(proposalId: number): Promise<void>;
-
-  cancel(proposalId: number): Promise<void>;
-
-  voteFor(proposalId: number): Promise<void>;
-
-  voteChoice(proposalId: number, choiceId: number): Promise<void>;
-
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteAgainst(proposalId: number): Promise<void>;
-
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  abstainFromVote(proposalId: number): Promise<void>;
-
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
-
-  voteSucceeded(proposalId: number): Promise<boolean>;
+interface ContractAddress {
+  governanceAddress: string;
+  storageAddress: string;
+  metaAddress: string;
+  timelockAddress: string;
 }
 
-export { Governance };
+interface Builder {
+  name(): Promise<string>;
+
+  aGovernance(): Promise<Builder>;
+
+  withName(name: string): Promise<Builder>;
+
+  withUrl(url: string): Promise<Builder>;
+
+  withDescription(desc: string): Promise<Builder>;
+
+  withSupervisor(supervisor: string): Promise<Builder>;
+
+  withVoterClassAddress(voterClass: string): Promise<Builder>;
+
+  withMinimumDuration(duration: number): Promise<Builder>;
+
+  build(): Promise<string>;
+
+  discoverContract(txId: string): Promise<ContractAddress>;
+}
+
+export { ContractAddress, Builder };

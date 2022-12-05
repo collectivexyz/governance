@@ -1,7 +1,7 @@
 {
   "author": "@collective",
-  "version": "0.0.1",
-  "name": "@collective/governance",
+  "version": "0.0.10",
+  "name": "@momentranks/governance",
   "engineStrict": true,
   "license": "BSD-3-Clause",
   "description": "Governance Library",
@@ -26,13 +26,14 @@
     "eslint-plugin-markdown": "^2.2.1",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.0",
-    "pino": "^7.11.0",
     "prettier": "^2.6.2",
     "ts-jest": "^28.0.2",
     "typescript": "^4.6.3"
   },
   "dependencies": {
-    "ethers": "5.7.2"
+    "ethers": "5.7.2",
+    "pino": "8.7.0",
+    "dotenv": "16.0.3"
   },
   "jest": {
     "moduleFileExtensions": [
