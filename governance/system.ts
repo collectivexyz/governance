@@ -45,7 +45,13 @@ export class System extends ContractAbi {
   async create(name: string, url: string, description: string, erc721contract: string, quorum: number): Promise<string> {
     this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}`);
     const encodedName = ethers.utils.formatBytes32String(name);
-    const buildTx = await this.contract.create(encodedName, url, description, erc721contract, quorum);
+    const buildTx = await this.contract['create(bytes32, string, string, address, uint256)'](
+      encodedName,
+      url,
+      description,
+      erc721contract,
+      quorum
+    );
     const buildTxReceipt = await buildTx.wait();
     this.logger.debug(buildTxReceipt);
     return buildTx.transactionHash;
@@ -62,7 +68,15 @@ export class System extends ContractAbi {
   ): Promise<string> {
     this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}, ${delay}, ${duration}`);
     const encodedName = ethers.utils.formatBytes32String(name);
-    const buildTx = await this.contract.create(encodedName, url, description, erc721contract, quorum, delay, duration);
+    const buildTx = await this.contract['create(bytes32, string, string, address, uint256, uint256, uint256)'](
+      encodedName,
+      url,
+      description,
+      erc721contract,
+      quorum,
+      delay,
+      duration
+    );
     const buildTxReceipt = await buildTx.wait();
     this.logger.debug(buildTxReceipt);
     return buildTx.transactionHash;

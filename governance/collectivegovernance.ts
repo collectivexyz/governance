@@ -79,7 +79,7 @@ export class CollectiveGovernance implements Governance {
 
   async propose(): Promise<number> {
     this.logger.debug('Propose new vote');
-    const proposeTx = await this.contract.propose();
+    const proposeTx = await this.contract['propose()']();
     const proposeTxReceipt = await proposeTx.wait();
     this.logger.info(proposeTxReceipt);
     const event = proposeTxReceipt.events.find((e: Event) => 'ProposalCreated' === e.event);
@@ -92,7 +92,7 @@ export class CollectiveGovernance implements Governance {
 
   async choiceVote(choiceCount: number): Promise<number> {
     this.logger.debug(`Propose choice vote: ${choiceCount}`);
-    const proposeTx = await this.contract.propose(choiceCount);
+    const proposeTx = await this.contract['propose(uint256)'](choiceCount);
     const proposeTxReceipt = await proposeTx.wait();
     this.logger.info(proposeTxReceipt);
     const event = proposeTxReceipt.events.find((e: Event) => 'ProposalCreated' === e.event);
@@ -193,7 +193,7 @@ export class CollectiveGovernance implements Governance {
 
   async voteFor(proposalId: number): Promise<void> {
     this.logger.debug(`vote for: ${proposalId}`);
-    const voteTx = await this.contract.voteFor(proposalId);
+    const voteTx = await this.contract['voteFor(uint256)'](proposalId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }
@@ -205,37 +205,51 @@ export class CollectiveGovernance implements Governance {
     this.logger.info(voteTxReceipt);
   }
 
-  async voteForWithTokenId(proposalId: number, tokenId: number): Promise<void> {
+  async voteForWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`vote for with token: ${tokenId}`);
-    const voteTx = await this.contract.voteFor(proposalId, tokenId);
+    const voteTx = await this.contract['voteFor(uint256,uint256)'](proposalId, tokenId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }
 
   async voteAgainst(proposalId: number): Promise<void> {
     this.logger.debug('vote against');
-    const voteTx = await this.contract.voteAgainst(proposalId);
+    const voteTx = await this.contract['voteAgainst(uint256)'](proposalId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }
 
-  async voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void> {
+  async voteAgainstWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`vote against with token: ${tokenId}`);
-    const voteTx = await this.contract.voteAgainstWithTokenId(proposalId, tokenId);
+    const voteTx = await this.contract['voteAgainst(uint256,uint256)'](proposalId, tokenId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }
 
   async abstainFromVote(proposalId: number): Promise<void> {
-    this.logger.debug('abstain');
-    const voteTx = await this.contract.abstainFromVote(proposalId);
+    this.logger.debug(`abstain: ${proposalId}`);
+    const voteTx = await this.contract['abstainFrom(uint256)'](proposalId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }
 
-  async abstainWithTokenId(proposalId: number, tokenId: number): Promise<void> {
-    this.logger.debug(`abstain for ${tokenId}`);
-    const voteTx = await this.contract.abstainWithTokenId(proposalId, tokenId);
+  async abstainWithToken(proposalId: number, tokenId: number): Promise<void> {
+    this.logger.debug(`abstain for ${proposalId}, ${tokenId}`);
+    const voteTx = await this.contract['abstainFrom(uint256,uint256)'](proposalId, tokenId);
+    const voteTxReceipt = await voteTx.wait();
+    this.logger.info(voteTxReceipt);
+  }
+
+  async undoVote(proposalId: number): Promise<void> {
+    this.logger.debug(`undo: ${proposalId}`);
+    const voteTx = await this.contract['undoVote(uint256)'](proposalId);
+    const voteTxReceipt = await voteTx.wait();
+    this.logger.info(voteTxReceipt);
+  }
+
+  async undoVoteWithToken(proposalId: number, tokenId: number): Promise<void> {
+    this.logger.debug(`undo: ${proposalId}, ${tokenId}`);
+    const voteTx = await this.contract['undoVote(uint256,uint256)'](proposalId, tokenId);
     const voteTxReceipt = await voteTx.wait();
     this.logger.info(voteTxReceipt);
   }

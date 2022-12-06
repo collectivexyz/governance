@@ -70,15 +70,15 @@ interface Governance {
 
   voteChoice(proposalId: number, choiceId: number): Promise<void>;
 
-  voteForWithTokenId(proposalId: number, tokenId: number): Promise<void>;
+  voteForWithToken(proposalId: number, tokenId: number): Promise<void>;
 
   voteAgainst(proposalId: number): Promise<void>;
 
-  voteAgainstWithTokenId(proposalId: number, tokenId: number): Promise<void>;
+  voteAgainstWithToken(proposalId: number, tokenId: number): Promise<void>;
 
   abstainFromVote(proposalId: number): Promise<void>;
 
-  abstainWithTokenId(proposalId: number, tokenId: number): Promise<void>;
+  abstainWithToken(proposalId: number, tokenId: number): Promise<void>;
 
   voteSucceeded(proposalId: number): Promise<boolean>;
 }
