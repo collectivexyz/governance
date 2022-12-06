@@ -93,12 +93,13 @@ export class CollectiveStorage extends ContractAbi implements Storage {
     choiceId: number
   ): Promise<{ name: string; description: string; transactionId: number; voteCount: number }> {
     const metaData = await this.contract.getChoice(proposalId, choiceId);
-    const decodedName = ethers.utils.parseBytes32String(metaData[0]);
+    const { 0: metaName, 1: description, 2: transactionId, 3: voteCount } = metaData;
+    const decodedName = ethers.utils.parseBytes32String(metaName);
     return {
       name: decodedName,
-      description: metaData[1],
-      transactionId: parseInt(metaData[2]),
-      voteCount: parseInt(metaData[3]),
+      description: description,
+      transactionId: parseInt(transactionId),
+      voteCount: parseInt(voteCount),
     };
   }
 }

@@ -79,7 +79,8 @@ export class MetaStorage extends ContractAbi implements Meta {
 
   async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
     const metaData = await this.contract.getMeta(proposalId, metaId);
-    const decodedName = ethers.utils.parseBytes32String(metaData[0]);
-    return { name: decodedName, value: metaData[1] };
+    const { 0: metaName, 1: metaValue } = metaData;
+    const decodedName = ethers.utils.parseBytes32String(metaName);
+    return { name: decodedName, value: metaValue };
   }
 }
