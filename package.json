@@ -35,6 +35,18 @@
     "pino": "8.7.0",
     "dotenv": "16.0.3"
   },
+  "files": [
+    "dist/",
+    "system",
+    "governance",
+    "README.md",
+    "index.ts",
+    "abi",
+    "LICENSE",
+    "!**/__test__",
+    "!**/*.test.ts",
+    "!**/*.spec.ts"
+  ],
   "jest": {
     "moduleFileExtensions": [
       "js",
