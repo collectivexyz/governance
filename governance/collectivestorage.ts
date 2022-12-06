@@ -31,60 +31,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ethers } from 'ethers';
-
+import Web3 from 'web3';
 import { ContractAbi } from './contractabi';
 import { Storage } from './storage';
 
 export class CollectiveStorage extends ContractAbi implements Storage {
   static ABI_NAME = 'Storage.json';
 
-  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
-    super(abiPath, CollectiveStorage.ABI_NAME, contractAddress, provider, wallet);
+  constructor(abiPath: string, contractAddress: string, web3: Web3) {
+    super(abiPath, CollectiveStorage.ABI_NAME, contractAddress, web3);
   }
 
   async name(): Promise<string> {
-    const name = await this.contract.name();
+    const name = await this.contract.methods.name().call();
     return name;
   }
 
   async version(): Promise<number> {
-    const version = await this.contract.version();
+    const version = await this.contract.methods.version().call();
     return parseInt(version);
   }
 
   async quorumRequired(proposalId: number): Promise<number> {
-    const quorum = await this.contract.quorumRequired(proposalId);
+    const quorum = await this.contract.methods.quorumRequired(proposalId).call();
     return parseInt(quorum);
   }
 
   async voteDelay(proposalId: number): Promise<number> {
-    const delay = await this.contract.voteDelay(proposalId);
+    const delay = await this.contract.methods.voteDelay(proposalId).call();
     return parseInt(delay);
   }
 
   async voteDuration(proposalId: number): Promise<number> {
-    const duration = await this.contract.voteDuration(proposalId);
+    const duration = await this.contract.methods.voteDuration(proposalId).call();
     return parseInt(duration);
   }
 
   async startTime(proposalId: number): Promise<number> {
-    const timeStr = await this.contract.startTime(proposalId);
+    const timeStr = await this.contract.methods.startTime(proposalId).call();
     return parseInt(timeStr);
   }
 
   async endTime(proposalId: number): Promise<number> {
-    const timeStr = await this.contract.endTime(proposalId);
+    const timeStr = await this.contract.methods.endTime(proposalId).call();
     return parseInt(timeStr);
   }
 
   async getWinningChoice(proposalId: number): Promise<number> {
-    const choiceNum = await this.contract.getWinningChoice(proposalId);
+    const choiceNum = await this.contract.methods.getWinningChoice(proposalId).call();
     return parseInt(choiceNum);
   }
 
   async choiceCount(proposalId: number): Promise<number> {
-    const choiceCount = await this.contract.choiceCount(proposalId);
+    const choiceCount = await this.contract.methods.choiceCount(proposalId).call();
     return parseInt(choiceCount);
   }
 
@@ -92,14 +91,13 @@ export class CollectiveStorage extends ContractAbi implements Storage {
     proposalId: number,
     choiceId: number
   ): Promise<{ name: string; description: string; transactionId: number; voteCount: number }> {
-    const metaData = await this.contract.getChoice(proposalId, choiceId);
-    const { 0: metaName, 1: description, 2: transactionId, 3: voteCount } = metaData;
-    const decodedName = ethers.utils.parseBytes32String(metaName);
+    const metaData = await this.contract.methods.getChoice(proposalId, choiceId).call();
+    const decodedName = this.web3.utils.hexToAscii(metaData[0]);
     return {
       name: decodedName,
-      description: description,
-      transactionId: parseInt(transactionId),
-      voteCount: parseInt(voteCount),
+      description: metaData[1],
+      transactionId: parseInt(metaData[2]),
+      voteCount: parseInt(metaData[3]),
     };
   }
 }

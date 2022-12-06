@@ -76,7 +76,7 @@ interface Governance {
 
   voteAgainstWithToken(proposalId: number, tokenId: number): Promise<void>;
 
-  abstainFromVote(proposalId: number): Promise<void>;
+  abstainFrom(proposalId: number): Promise<void>;
 
   abstainWithToken(proposalId: number, tokenId: number): Promise<void>;
 

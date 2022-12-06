@@ -31,10 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import * as dotenv from 'dotenv';
 import { pino, Logger } from 'pino';
-
-dotenv.config();
 
 // config is depending on logger
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';

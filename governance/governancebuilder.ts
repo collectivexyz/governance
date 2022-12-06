@@ -30,131 +30,150 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import { ethers, Event } from 'ethers';
-import { Builder, ContractAddress } from './builder';
 
+import Web3 from 'web3';
+import { EventData } from 'web3-eth-contract';
+import { Wallet } from './wallet';
 import { ContractAbi } from './contractabi';
 
-export class GovernanceBuilder extends ContractAbi implements Builder {
+interface ContractAddress {
+  governanceAddress: string;
+  storageAddress: string;
+  metaAddress: string;
+  timelockAddress: string;
+}
+
+export class GovernanceBuilder extends ContractAbi {
   static ABI_NAME = 'GovernanceBuilder.json';
 
-  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
-    super(abiPath, GovernanceBuilder.ABI_NAME, contractAddress, provider, wallet);
+  private readonly wallet: Wallet;
+  private readonly gas: number;
+
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
+    super(abiPath, GovernanceBuilder.ABI_NAME, contractAddress, web3);
+    this.wallet = wallet;
+    this.gas = gas;
   }
 
   async name(): Promise<string> {
-    const name = await this.contract.name();
+    const name = await this.contract.methods.name().call();
     return name;
-  }
-
-  async version(): Promise<number> {
-    const version = await this.contract.number();
-    return version;
   }
 
   async aGovernance(): Promise<GovernanceBuilder> {
     this.logger.info('Governance Builder Started');
-    const tx = await this.contract.aGovernance();
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.aGovernance().send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withName(name: string): Promise<GovernanceBuilder> {
     this.logger.info(`withName ${name}`);
-    const encodedName = ethers.utils.formatBytes32String(name);
-    const tx = await this.contract.withName(encodedName);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const encodedName = this.web3.utils.asciiToHex(name);
+    const tx = await this.contract.methods.withName(encodedName).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withUrl(url: string): Promise<GovernanceBuilder> {
     this.logger.info(`withUrl ${url}`);
-    const tx = await this.contract.withUrl(url);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.withUrl(url).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withDescription(desc: string): Promise<GovernanceBuilder> {
     this.logger.info(`withDescription ${desc}`);
-    const tx = await this.contract['withDescription(string)'](desc);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.withDescription(desc).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withSupervisor(supervisor: string): Promise<GovernanceBuilder> {
     this.logger.info(`withSupervisor ${supervisor}`);
-    const tx = await this.contract.withSupervisor(supervisor);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.withSupervisor(supervisor).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withVoterClassAddress(voterClass: string): Promise<GovernanceBuilder> {
     this.logger.info(`withVoterClass ${voterClass}`);
-    const tx = await this.contract.withVoterClassAddress(voterClass);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.withVoterClassAddress(voterClass).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async withMinimumDuration(duration: number): Promise<GovernanceBuilder> {
     this.logger.info(`withMinimumDuration ${duration}`);
-    const tx = await this.contract.withMinimumDuration(duration);
-    const txReceipt = await tx.wait();
-    this.logger.info(txReceipt);
+    const tx = await this.contract.methods.withMinimumDuration(duration).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
     return this;
   }
 
   async build(): Promise<string> {
     this.logger.info('Building Governance');
-    const buildTx = await this.contract.build();
-    const txReceipt = await buildTx.wait();
-    this.logger.info(txReceipt);
-    const event = txReceipt.events.find((e: Event) => 'GovernanceContractCreated' === e.event);
-    const governance = event?.args['governance'];
+    const buildTx = await this.contract.methods.build().send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(buildTx);
+
+    const event: EventData = buildTx.events['GovernanceContractCreated'];
+    const governance = event.returnValues['governance'];
     if (governance) {
       return governance;
     }
     throw new Error('Unknown Governance created');
   }
 
-  async discoverContract(txId: string): Promise<ContractAddress> {
-    const tx = await this.provider.getTransaction(txId);
+  async discoverContractAddress(txId: string): Promise<ContractAddress> {
+    const tx = await this.web3.eth.getTransaction(txId);
     if (!tx.blockNumber) {
       throw new Error(`Block not known for txId: ${txId}`);
     }
-    this.logger.info(`Fetch ${tx.blockNumber}`);
-    const eventFilter = this.contract.filters.GovernanceContractCreated();
-    const eventArray: Event[] = await this.contract.queryFilter(eventFilter, tx.blockNumber);
+    const eventArray = await this.contract.getPastEvents('GovernanceContractCreated', {
+      fromBlock: tx.blockNumber,
+      toBlock: tx.blockNumber,
+    });
     let governanceAddress = '';
     let storageAddress = '';
     let metaAddress = '';
     let timelockAddress = '';
-    eventArray
-      .filter((e) => e.transactionHash === txId)
-      .forEach((e) => {
-        if (e.args) {
-          governanceAddress = e.args['governance'];
-          storageAddress = e.args['_storage'];
-          timelockAddress = e.args['timeLock'];
-          metaAddress = e.args['metaStorage'];
-        }
-      });
-    if (governanceAddress && storageAddress && metaAddress && timelockAddress) {
-      this.logger.info(
-        `Found governance: ${governanceAddress}, storage: ${storageAddress}, meta: ${metaAddress}, timelock: ${timelockAddress}`
-      );
-      return {
-        governanceAddress: governanceAddress,
-        storageAddress: storageAddress,
-        metaAddress: metaAddress,
-        timelockAddress: timelockAddress,
-      };
-    }
-    throw new Error('Discovery failed missing event data');
+    eventArray.forEach((e) => {
+      governanceAddress = e.returnValues['governance'];
+      storageAddress = e.returnValues['_storage'];
+      timelockAddress = e.returnValues['timeLock'];
+      metaAddress = e.returnValues['metaStorage'];
+    });
+    this.logger.info(
+      `Found governance: ${governanceAddress}, storage: ${storageAddress}, meta: ${metaAddress}, timelock: ${timelockAddress}`
+    );
+    return {
+      governanceAddress: governanceAddress,
+      storageAddress: storageAddress,
+      metaAddress: metaAddress,
+      timelockAddress: timelockAddress,
+    };
   }
 }

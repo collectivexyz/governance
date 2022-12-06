@@ -31,56 +31,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ethers } from 'ethers';
-
+import Web3 from 'web3';
 import { ContractAbi } from './contractabi';
 import { Meta } from './meta';
 
 export class MetaStorage extends ContractAbi implements Meta {
   static ABI_NAME = 'MetaStorage.json';
 
-  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
-    super(abiPath, MetaStorage.ABI_NAME, contractAddress, provider, wallet);
+  constructor(abiPath: string, contractAddress: string, web3: Web3) {
+    super(abiPath, MetaStorage.ABI_NAME, contractAddress, web3);
   }
 
   async name(): Promise<string> {
-    const name = await this.contract.name();
+    const name = await this.contract.methods.name().call();
     return name;
   }
 
   async version(): Promise<number> {
-    const version = await this.contract.version();
+    const version = await this.contract.methods.version().call();
     return parseInt(version);
   }
 
   async community(): Promise<string> {
-    const communityHexEnc = await this.contract.community();
-    const community = ethers.utils.parseBytes32String(communityHexEnc);
+    const communityHexEnc = await this.contract.methods.community().call();
+    const community = this.web3.utils.hexToAscii(communityHexEnc);
     return community;
   }
 
   async description(): Promise<string> {
-    const description = await this.contract['description()']();
+    const description = await this.contract.methods.description().call();
     return description;
   }
 
   async url(): Promise<string> {
-    const description = await this.contract['url()']();
+    const description = await this.contract.methods.url().call();
     return description;
   }
 
   async getMetaDescription(proposalId: number): Promise<string> {
-    return await this.contract['description(uint256)'](proposalId);
+    return await this.contract.methods.description(proposalId).call();
   }
 
   async getMetaUrl(proposalId: number): Promise<string> {
-    return await this.contract['url(uint256)'](proposalId);
+    return await this.contract.methods.url(proposalId).call();
   }
 
   async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
-    const metaData = await this.contract.getMeta(proposalId, metaId);
-    const { 0: metaName, 1: metaValue } = metaData;
-    const decodedName = ethers.utils.parseBytes32String(metaName);
-    return { name: decodedName, value: metaValue };
+    const metaData = await this.contract.methods.getMeta(proposalId, metaId).call();
+    const decodedName = this.web3.utils.hexToAscii(metaData[0]);
+    return { name: decodedName, value: metaData[1] };
   }
 }

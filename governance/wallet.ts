@@ -31,27 +31,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { loadAbi, pathWithSlash } from '../system/abi';
-import { LoggerFactory } from '../system/logging';
 import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
+import { getKeyAsEthereumKey } from '../system/abi';
 
-export class ContractAbi {
-  protected readonly logger = LoggerFactory.getLogger(module.filename);
+export interface Wallet {
+  getAddress(): string;
+  connect(): void;
+}
 
-  public readonly contractAddress: string;
+export class EthWallet implements Wallet {
+  private readonly walletAddress;
+  private readonly account: any;
+  private readonly web3: Web3;
 
-  protected readonly web3: Web3;
-  protected readonly contractAbi: any[];
-  protected readonly contract: Contract;
-
-  constructor(abiPath: string, abiName: string, contractAddress: string, web3: Web3) {
-    this.contractAddress = contractAddress;
+  constructor(privateKey: string, web3: Web3) {
+    this.walletAddress = getKeyAsEthereumKey(privateKey);
     this.web3 = web3;
-    const abiFile = pathWithSlash(abiPath) + abiName;
-    this.logger.info(`Loading ABI: ${abiFile}`);
-    this.contractAbi = loadAbi(abiFile);
-    this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress);
-    this.logger.info(`Connected to contract at ${contractAddress}`);
+    this.account = this.web3.eth.accounts.privateKeyToAccount(this.walletAddress);
+  }
+
+  connect(): void {
+    this.web3.eth.accounts.wallet.add(this.account);
+    this.web3.eth.defaultAccount = this.account.address;
+  }
+
+  getAddress(): string {
+    return this.account.address;
   }
 }

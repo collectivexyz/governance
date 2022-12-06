@@ -9,3 +9,4 @@ export * from './system';
 export * from './storage';
 export * from './collectivestorage';
 export * from './voterclassfactory';
+export * from './wallet';

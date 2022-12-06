@@ -29,29 +29,34 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-import { ethers, Event } from 'ethers';
+import Web3 from 'web3';
+import { Contract, EventData } from 'web3-eth-contract';
 import { ContractAbi } from './contractabi';
+import { Wallet } from './wallet';
 
 export class VoterClassFactory extends ContractAbi {
   static ABI_NAME = 'VoterClassFactory.json';
 
-  constructor(abiPath: string, contractAddress: string, provider: ethers.providers.Provider, wallet: ethers.Wallet) {
-    super(abiPath, VoterClassFactory.ABI_NAME, contractAddress, provider, wallet);
+  private readonly wallet: Wallet;
+  private readonly gas: number;
+
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
+    super(abiPath, VoterClassFactory.ABI_NAME, contractAddress, web3);
+    this.wallet = wallet;
+    this.gas = gas;
   }
 
   async createERC721(projectAddress: string, weight: number): Promise<string> {
     this.logger.debug(`Sending createERC721 to ${projectAddress}`);
-
-    const tx = await this.contract.createERC721(projectAddress, weight);
+    const tx = await this.contract.methods.createERC721(projectAddress, weight).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
     this.logger.info(tx);
-    const receipt = await tx.wait();
-    const created = receipt.events.find((e: Event) => e.event === 'VoterClassCreated');
-    if (created && created.args) {
-      const classAddress = created.args['voterClass'];
-      if (classAddress) {
-        return classAddress;
-      }
+    const event: EventData = tx.events['VoterClassCreated'];
+    const classAddress = event.returnValues['voterClass'];
+    if (classAddress) {
+      return classAddress;
     }
     throw new Error('Unknown VoterClass created');
   }
