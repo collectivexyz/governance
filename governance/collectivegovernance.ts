@@ -82,8 +82,7 @@ export class CollectiveGovernance implements Governance {
     const proposeTx = await this.contract.propose();
     const proposeTxReceipt = await proposeTx.wait();
     this.logger.info(proposeTxReceipt);
-    const filter = this.contract.filters.ProposalCreated();
-    const event = proposeTxReceipt.events.find((e: Event) => (filter.topics ? filter.topics[0] === e.event : false));
+    const event = proposeTxReceipt.events.find((e: Event) => 'ProposalCreated' === e.event);
     const proposalId = event?.args['proposalId'];
     if (proposalId) {
       return parseInt(proposalId);
@@ -96,8 +95,7 @@ export class CollectiveGovernance implements Governance {
     const proposeTx = await this.contract.propose(choiceCount);
     const proposeTxReceipt = await proposeTx.wait();
     this.logger.info(proposeTxReceipt);
-    const filter = this.contract.filters.ProposalCreated();
-    const event = proposeTxReceipt.events.find((e: Event) => (filter.topics ? filter.topics[0] === e.event : false));
+    const event = proposeTxReceipt.events.find((e: Event) => 'ProposalCreated' === e.event);
     const proposalId = event?.args['proposalId'];
     if (proposalId) {
       return parseInt(proposalId);
@@ -126,8 +124,7 @@ export class CollectiveGovernance implements Governance {
     const tx = await this.contract.addMeta(proposalId, encodedName, value);
     const txReceipt = await tx.wait();
     this.logger.info(txReceipt);
-    const filter = this.contract.filters.ProposalMeta();
-    const event = txReceipt.events.find((e: Event) => (filter.topics ? filter.topics[0] === e.event : false));
+    const event = txReceipt.events.find((e: Event) => 'ProposalMeta' === e.event);
     const metaId = event?.args['metaId'];
     if (metaId) {
       return parseInt(metaId);
@@ -147,8 +144,7 @@ export class CollectiveGovernance implements Governance {
     const attachTx = await this.contract.attachTransaction(proposalId, target, value, signature, calldata, etaOfLock);
     const attachTxReceipt = await attachTx.wait();
     this.logger.info(attachTxReceipt);
-    const filter = this.contract.filters.ProposalTransactionAttached();
-    const event = attachTxReceipt.events.find((e: Event) => (filter.topics ? filter.topics[0] === e.event : false));
+    const event = attachTxReceipt.events.find((e: Event) => 'ProposalTransactionAttached' === e.event);
     const transactionId = event?.args['transactionId'];
     if (transactionId) {
       return parseInt(transactionId);

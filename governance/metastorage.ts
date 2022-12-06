@@ -65,7 +65,7 @@ export class MetaStorage extends ContractAbi implements Meta {
   }
 
   async url(): Promise<string> {
-    const description = await this.contract.url();
+    const description = await this.contract['url()']();
     return description;
   }
 
@@ -74,7 +74,7 @@ export class MetaStorage extends ContractAbi implements Meta {
   }
 
   async getMetaUrl(proposalId: number): Promise<string> {
-    return await this.contract.url(proposalId);
+    return await this.contract['url(uint256)'](proposalId);
   }
 
   async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {

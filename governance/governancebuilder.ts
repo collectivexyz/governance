@@ -47,6 +47,11 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return name;
   }
 
+  async version(): Promise<number> {
+    const version = await this.contract.number();
+    return version;
+  }
+
   async aGovernance(): Promise<GovernanceBuilder> {
     this.logger.info('Governance Builder Started');
     const tx = await this.contract.aGovernance();
@@ -74,7 +79,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
 
   async withDescription(desc: string): Promise<GovernanceBuilder> {
     this.logger.info(`withDescription ${desc}`);
-    const tx = await this.contract.withDescription(desc);
+    const tx = await this.contract['withDescription(string)'](desc);
     const txReceipt = await tx.wait();
     this.logger.info(txReceipt);
     return this;
@@ -109,8 +114,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     const buildTx = await this.contract.build();
     const txReceipt = await buildTx.wait();
     this.logger.info(txReceipt);
-    const filter = this.contract.filters.GovernanceContractCreated();
-    const event = txReceipt.events.find((e: Event) => (filter.topics ? filter.topics[0] === e.event : false));
+    const event = txReceipt.events.find((e: Event) => 'GovernanceContractCreated' === e.event);
     const governance = event?.args['governance'];
     if (governance) {
       return governance;
