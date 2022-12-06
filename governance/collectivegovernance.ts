@@ -154,14 +154,14 @@ export class CollectiveGovernance implements Governance {
 
   async configure(proposalId: number, quorum: number): Promise<void> {
     this.logger.debug(`configure vote: ${proposalId}, ${quorum}`);
-    const configureTx = await this.contract.configure(proposalId, quorum);
+    const configureTx = await this.contract['configure(uint256,uint256)'](proposalId, quorum);
     const configureTxReceipt = await configureTx.wait();
     this.logger.info(configureTxReceipt);
   }
 
   async configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void> {
     this.logger.debug(`configure vote: ${proposalId}, ${quorum}, ${requiredDelay}, ${requiredDuration}`);
-    const configureTx = await this.contract.configure(proposalId, quorum, requiredDelay, requiredDuration);
+    const configureTx = await this.contract['configure(uint256,uint256,uint256,uint256)'](proposalId, quorum, requiredDelay, requiredDuration);
     const configureTxReceipt = await configureTx.wait();
     this.logger.info(configureTxReceipt);
   }
