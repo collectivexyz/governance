@@ -1,6 +1,6 @@
 {
   "author": "@collective",
-  "version": "0.0.21",
+  "version": "0.2.0",
   "name": "@momentranks/governance",
   "engineStrict": true,
   "license": "BSD-3-Clause",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "web3": "1.8.1",
+    "web3-eth-contract": "1.8.1",
     "pino": "8.7.0"
   },
   "files": [

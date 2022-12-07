@@ -45,8 +45,8 @@ export class CollectiveGovernance implements Governance {
   static STRAT_NAME = 'VoteStrategy.json';
 
   public readonly contractAddress: string;
-  public readonly web3: Web3;
-  private readonly wallet: Wallet;
+  protected readonly web3: Web3;
+  protected readonly wallet: Wallet;
 
   private readonly contractAbi: any[];
   private readonly contract: Contract;

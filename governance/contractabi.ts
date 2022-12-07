@@ -43,7 +43,7 @@ export class ContractAbi {
 
   protected readonly web3: Web3;
   protected readonly contractAbi: any[];
-  protected readonly contract: Contract;
+  public contract: Contract;
 
   constructor(abiPath: string, abiName: string, contractAddress: string, web3: Web3) {
     this.contractAddress = contractAddress;

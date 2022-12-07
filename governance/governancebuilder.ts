@@ -35,6 +35,7 @@ import Web3 from 'web3';
 import { EventData } from 'web3-eth-contract';
 import { Wallet } from './wallet';
 import { ContractAbi } from './contractabi';
+import { Builder } from './builder';
 
 interface ContractAddress {
   governanceAddress: string;
@@ -43,7 +44,7 @@ interface ContractAddress {
   timelockAddress: string;
 }
 
-export class GovernanceBuilder extends ContractAbi {
+export class GovernanceBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'GovernanceBuilder.json';
 
   private readonly wallet: Wallet;
@@ -60,7 +61,7 @@ export class GovernanceBuilder extends ContractAbi {
     return name;
   }
 
-  async aGovernance(): Promise<GovernanceBuilder> {
+  async aGovernance(): Promise<Builder> {
     this.logger.info('Governance Builder Started');
     const tx = await this.contract.methods.aGovernance().send({
       from: this.wallet.getAddress(),
@@ -70,7 +71,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withName(name: string): Promise<GovernanceBuilder> {
+  async withName(name: string): Promise<Builder> {
     this.logger.info(`withName ${name}`);
     const encodedName = this.web3.utils.asciiToHex(name);
     const tx = await this.contract.methods.withName(encodedName).send({
@@ -81,7 +82,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withUrl(url: string): Promise<GovernanceBuilder> {
+  async withUrl(url: string): Promise<Builder> {
     this.logger.info(`withUrl ${url}`);
     const tx = await this.contract.methods.withUrl(url).send({
       from: this.wallet.getAddress(),
@@ -91,7 +92,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withDescription(desc: string): Promise<GovernanceBuilder> {
+  async withDescription(desc: string): Promise<Builder> {
     this.logger.info(`withDescription ${desc}`);
     const tx = await this.contract.methods.withDescription(desc).send({
       from: this.wallet.getAddress(),
@@ -101,7 +102,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withSupervisor(supervisor: string): Promise<GovernanceBuilder> {
+  async withSupervisor(supervisor: string): Promise<Builder> {
     this.logger.info(`withSupervisor ${supervisor}`);
     const tx = await this.contract.methods.withSupervisor(supervisor).send({
       from: this.wallet.getAddress(),
@@ -111,7 +112,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withVoterClassAddress(voterClass: string): Promise<GovernanceBuilder> {
+  async withVoterClassAddress(voterClass: string): Promise<Builder> {
     this.logger.info(`withVoterClass ${voterClass}`);
     const tx = await this.contract.methods.withVoterClassAddress(voterClass).send({
       from: this.wallet.getAddress(),
@@ -121,7 +122,7 @@ export class GovernanceBuilder extends ContractAbi {
     return this;
   }
 
-  async withMinimumDuration(duration: number): Promise<GovernanceBuilder> {
+  async withMinimumDuration(duration: number): Promise<Builder> {
     this.logger.info(`withMinimumDuration ${duration}`);
     const tx = await this.contract.methods.withMinimumDuration(duration).send({
       from: this.wallet.getAddress(),
@@ -147,7 +148,7 @@ export class GovernanceBuilder extends ContractAbi {
     throw new Error('Unknown Governance created');
   }
 
-  async discoverContractAddress(txId: string): Promise<ContractAddress> {
+  async discoverContract(txId: string): Promise<ContractAddress> {
     const tx = await this.web3.eth.getTransaction(txId);
     if (!tx.blockNumber) {
       throw new Error(`Block not known for txId: ${txId}`);
