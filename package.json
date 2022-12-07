@@ -1,6 +1,6 @@
 {
   "author": "@collective",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "@momentranks/governance",
   "engineStrict": true,
   "license": "BSD-3-Clause",
