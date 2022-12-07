@@ -49,7 +49,11 @@ export class MetaStorage extends ContractAbi implements Meta {
 
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
-    return parseInt(version);
+    const v = parseInt(version);
+    if (v) {
+      return v;
+    }
+    throw new Error('Version is not a number');
   }
 
   async community(): Promise<string> {

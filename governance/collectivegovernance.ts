@@ -79,7 +79,11 @@ export class CollectiveGovernance implements Governance {
 
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
-    return parseInt(version);
+    const v = parseInt(version);
+    if (v) {
+      return v;
+    }
+    throw new Error('Version is not a number');
   }
 
   async propose(): Promise<number> {
@@ -141,7 +145,10 @@ export class CollectiveGovernance implements Governance {
     this.logger.info(tx);
     const event: EventData = tx.events['ProposalMeta'];
     const metaId = parseInt(event.returnValues['metaId']);
-    return metaId;
+    if (metaId) {
+      return metaId;
+    }
+    throw new Error('Metadata Id is not a number');
   }
 
   async attachTransaction(
@@ -162,7 +169,10 @@ export class CollectiveGovernance implements Governance {
     this.logger.info(attachTx);
     const event: EventData = attachTx.events['ProposalTransactionAttached'];
     const transactionId = parseInt(event.returnValues['transactionId']);
-    return transactionId;
+    if (transactionId) {
+      return transactionId;
+    }
+    throw new Error('Transaction id is not a number');
   }
 
   async configure(proposalId: number, quorum: number): Promise<void> {

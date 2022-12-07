@@ -31,27 +31,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Web3 from 'web3';
-
-export function timeNow(): number {
-  return Math.floor(Date.now() / 1000);
-}
-
-export async function timeout(duration: number): Promise<void> {
-  return new Promise<void>((resolve) => {
-    setTimeout(resolve, duration);
-  });
-}
-
-export async function blocktimeNow(web3: Web3): Promise<number> {
-  const blockNumber = await web3.eth.getBlockNumber();
-  const block = await web3.eth.getBlock(blockNumber);
-  if (typeof block.timestamp === 'string') {
-    const ts = parseInt(block.timestamp);
-    if (ts) {
-      return ts;
-    }
-    throw new Error('Timestamp is not a number');
+export function parseIntOrThrow(num: string): number {
+  const n = parseInt(num);
+  if (n) {
+    return n;
   }
-  return block.timestamp;
+  throw new Error(`${num} is not a number`);
 }

@@ -34,6 +34,7 @@
 import Web3 from 'web3';
 import { ContractAbi } from './contractabi';
 import { Storage } from './storage';
+import { parseIntOrThrow } from './version';
 
 export class CollectiveStorage extends ContractAbi implements Storage {
   static ABI_NAME = 'Storage.json';
@@ -49,42 +50,42 @@ export class CollectiveStorage extends ContractAbi implements Storage {
 
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
-    return parseInt(version);
+    return parseIntOrThrow(version);
   }
 
   async quorumRequired(proposalId: number): Promise<number> {
     const quorum = await this.contract.methods.quorumRequired(proposalId).call();
-    return parseInt(quorum);
+    return parseIntOrThrow(quorum);
   }
 
   async voteDelay(proposalId: number): Promise<number> {
     const delay = await this.contract.methods.voteDelay(proposalId).call();
-    return parseInt(delay);
+    return parseIntOrThrow(delay);
   }
 
   async voteDuration(proposalId: number): Promise<number> {
     const duration = await this.contract.methods.voteDuration(proposalId).call();
-    return parseInt(duration);
+    return parseIntOrThrow(duration);
   }
 
   async startTime(proposalId: number): Promise<number> {
     const timeStr = await this.contract.methods.startTime(proposalId).call();
-    return parseInt(timeStr);
+    return parseIntOrThrow(timeStr);
   }
 
   async endTime(proposalId: number): Promise<number> {
     const timeStr = await this.contract.methods.endTime(proposalId).call();
-    return parseInt(timeStr);
+    return parseIntOrThrow(timeStr);
   }
 
   async getWinningChoice(proposalId: number): Promise<number> {
     const choiceNum = await this.contract.methods.getWinningChoice(proposalId).call();
-    return parseInt(choiceNum);
+    return parseIntOrThrow(choiceNum);
   }
 
   async choiceCount(proposalId: number): Promise<number> {
     const choiceCount = await this.contract.methods.choiceCount(proposalId).call();
-    return parseInt(choiceCount);
+    return parseIntOrThrow(choiceCount);
   }
 
   async getChoice(
@@ -93,11 +94,16 @@ export class CollectiveStorage extends ContractAbi implements Storage {
   ): Promise<{ name: string; description: string; transactionId: number; voteCount: number }> {
     const metaData = await this.contract.methods.getChoice(proposalId, choiceId).call();
     const decodedName = this.web3.utils.hexToAscii(metaData[0]);
-    return {
-      name: decodedName,
-      description: metaData[1],
-      transactionId: parseInt(metaData[2]),
-      voteCount: parseInt(metaData[3]),
-    };
+    const transactionId = parseIntOrThrow(metaData[2]);
+    const voteCount = parseIntOrThrow(metaData[3]);
+    if (transactionId && voteCount) {
+      return {
+        name: decodedName,
+        description: metaData[1],
+        transactionId: transactionId,
+        voteCount: voteCount,
+      };
+    }
+    throw new Error('Choice returned invalid data');
   }
 }
