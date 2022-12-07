@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "packageManager": "yarn@3.2.0",
   "scripts": {
-    "prettier:check": "prettier --check \"**/*.ts\"",
+    "prettier:check": "prettier --check \"(governance|system)/**/*.ts\"",
     "prettier:fix": "prettier --write \"**/*.ts\" \"**/*.ts\"",
     "lint": "eslint --ext .ts",
     "build": "tsc",

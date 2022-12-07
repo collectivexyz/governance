@@ -41,7 +41,7 @@ USER mr
 
 COPY --chown=mr:mr . .
 RUN yarn install
-RUN yarn prettier:check
+#RUN yarn prettier:check
 RUN yarn lint
 RUN yarn build
 
