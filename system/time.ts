@@ -32,6 +32,7 @@
  */
 
 import Web3 from 'web3';
+import { parseIntOrThrow } from '../governance/version';
 
 export function timeNow(): number {
   return Math.floor(Date.now() / 1000);
@@ -47,11 +48,7 @@ export async function blocktimeNow(web3: Web3): Promise<number> {
   const blockNumber = await web3.eth.getBlockNumber();
   const block = await web3.eth.getBlock(blockNumber);
   if (typeof block.timestamp === 'string') {
-    const ts = parseInt(block.timestamp);
-    if (ts) {
-      return ts;
-    }
-    throw new Error('Timestamp is not a number');
+    return parseIntOrThrow(block.timestamp);
   }
   return block.timestamp;
 }

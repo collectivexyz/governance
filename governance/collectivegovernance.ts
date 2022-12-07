@@ -37,6 +37,7 @@ import { Wallet } from './wallet';
 import { loadAbi, pathWithSlash } from '../system/abi';
 import { LoggerFactory } from '../system/logging';
 import { Governance } from './governance';
+import { parseIntOrThrow } from './version';
 
 export class CollectiveGovernance implements Governance {
   private readonly logger = LoggerFactory.getLogger(module.filename);
@@ -79,11 +80,7 @@ export class CollectiveGovernance implements Governance {
 
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
-    const v = parseInt(version);
-    if (v) {
-      return v;
-    }
-    throw new Error('Version is not a number');
+    return parseIntOrThrow(version);
   }
 
   async propose(): Promise<number> {
@@ -94,11 +91,8 @@ export class CollectiveGovernance implements Governance {
     });
     this.logger.info(proposeTx);
     const event: EventData = proposeTx.events['ProposalCreated'];
-    const proposalId = parseInt(event.returnValues['proposalId']);
-    if (proposalId) {
-      return proposalId;
-    }
-    throw new Error('Unknown proposal created');
+    return parseIntOrThrow(event.returnValues['proposalId']);
+
   }
 
   async choiceVote(choiceCount: number): Promise<number> {
@@ -109,11 +103,7 @@ export class CollectiveGovernance implements Governance {
     });
     this.logger.info(proposeTx);
     const event: EventData = proposeTx.events['ProposalCreated'];
-    const proposalId = parseInt(event.returnValues['proposalId']);
-    if (proposalId) {
-      return proposalId;
-    }
-    throw new Error('Unknown proposal created');
+    return parseIntOrThrow(event.returnValues['proposalId']);
   }
 
   async setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void> {
@@ -144,11 +134,7 @@ export class CollectiveGovernance implements Governance {
     });
     this.logger.info(tx);
     const event: EventData = tx.events['ProposalMeta'];
-    const metaId = parseInt(event.returnValues['metaId']);
-    if (metaId) {
-      return metaId;
-    }
-    throw new Error('Metadata Id is not a number');
+    return parseIntOrThrow(event.returnValues['metaId']);
   }
 
   async attachTransaction(
@@ -168,11 +154,7 @@ export class CollectiveGovernance implements Governance {
       });
     this.logger.info(attachTx);
     const event: EventData = attachTx.events['ProposalTransactionAttached'];
-    const transactionId = parseInt(event.returnValues['transactionId']);
-    if (transactionId) {
-      return transactionId;
-    }
-    throw new Error('Transaction id is not a number');
+    return parseIntOrThrow(event.returnValues['transactionId']);
   }
 
   async configure(proposalId: number, quorum: number): Promise<void> {

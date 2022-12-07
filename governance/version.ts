@@ -33,8 +33,8 @@
 
 export function parseIntOrThrow(num: string): number {
   const n = parseInt(num);
-  if (n) {
-    return n;
+  if (isNaN(n)) {
+    throw new Error(`${num} is not a number`);
   }
-  throw new Error(`${num} is not a number`);
+  return n;
 }

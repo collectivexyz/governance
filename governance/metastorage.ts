@@ -34,6 +34,7 @@
 import Web3 from 'web3';
 import { ContractAbi } from './contractabi';
 import { Meta } from './meta';
+import { parseIntOrThrow } from './version';
 
 export class MetaStorage extends ContractAbi implements Meta {
   static ABI_NAME = 'MetaStorage.json';
@@ -49,11 +50,7 @@ export class MetaStorage extends ContractAbi implements Meta {
 
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
-    const v = parseInt(version);
-    if (v) {
-      return v;
-    }
-    throw new Error('Version is not a number');
+    return parseIntOrThrow(version);
   }
 
   async community(): Promise<string> {
