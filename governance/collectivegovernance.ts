@@ -92,7 +92,6 @@ export class CollectiveGovernance implements Governance {
     this.logger.info(proposeTx);
     const event: EventData = proposeTx.events['ProposalCreated'];
     return parseIntOrThrow(event.returnValues['proposalId']);
-
   }
 
   async choiceVote(choiceCount: number): Promise<number> {

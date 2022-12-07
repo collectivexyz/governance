@@ -1,6 +1,6 @@
 {
   "author": "@collective",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "@momentranks/governance",
   "engineStrict": true,
   "license": "BSD-3-Clause",
@@ -10,7 +10,7 @@
   "packageManager": "yarn@3.2.0",
   "scripts": {
     "prettier:check": "prettier --check \"(governance|system)/**/*.ts\"",
-    "prettier:fix": "prettier --write \"**/*.ts\" \"**/*.ts\"",
+    "prettier:fix": "prettier --write \"(governance|system)/**/*.ts\" \"(governance|system)/**/*.ts\"",
     "lint": "eslint --ext .ts",
     "build": "tsc",
     "prepublishOnly": "yarn build",
