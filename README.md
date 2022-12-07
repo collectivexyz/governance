@@ -18,7 +18,7 @@
 
 Connect an existing Governance contract from the builder address and build transaction id
 
-```
+``` ts
 
 import {
   Wallet,
