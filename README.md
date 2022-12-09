@@ -47,7 +47,7 @@ export async function connect(): Promise<Collective> {
     const privateKey = 'XXXXXXXXXXXX';
     const abiPath = 'node_modules/@momentranks/governance/abi';
     const builderAddress = '0xd64f3Db037B263D54561a2cc9885Db370B51E354';
-    const maximumGas = 10000000;
+    const maximumGas = 600000;
     const buildTransaction = '0x0f7f3e13055547b8b6ac5b28285abc960266c6297094ab451ca9de318cbf5906';
 
     const web3 = new Web3(rpcUrl);
