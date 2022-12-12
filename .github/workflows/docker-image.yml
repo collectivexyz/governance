@@ -36,6 +36,6 @@ jobs:
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
       - name: npm publish (github)
         run: |
-          cp -f ${NPM_CONFIG_USER_CONFIG} .npmrc
-          docker run -e NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
+          if [ -f ${NPM_CONFIG_USERCONFIG} ]; then cp -f ${NPM_CONFIG_USERCONFIG} .npmrc; else exit 1; fi
+          docker run -e NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NPM_CONFIG_USER_CONFIG=${NPM_CONFIG_USER_CONFIG} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
