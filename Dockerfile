@@ -31,6 +31,8 @@ ENV NODE_PATH ${NVM_NODE_PATH}/lib/node_modules
 ENV PATH      ${NVM_NODE_PATH}/bin:$PATH
 
 ENV NPM_TOKEN=${NPM_TOKEN}
+# used by github
+ENV NODE_AUTH_TOKEN=${NPM_TOKEN}
 
 RUN npm install npm -g
 RUN npm install yarn -g
@@ -41,8 +43,9 @@ USER mr
 
 COPY --chown=mr:mr . .
 RUN yarn install
-#RUN yarn prettier:check
+RUN yarn prettier:check
 RUN yarn lint
 RUN yarn build
+RUN yarn test
 
-CMD yarn test
+CMD echo "@momentranks/governance"
