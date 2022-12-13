@@ -14,7 +14,8 @@
     "lint": "eslint --ext .ts",
     "build": "tsc",
     "prepublishOnly": "yarn build",
-    "test": "jest"
+    "test": "jest",
+    "docs": "typedoc"
   },
   "devDependencies": {
     "@types/jest": "^27.5.0",

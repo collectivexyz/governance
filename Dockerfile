@@ -9,7 +9,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     sudo git \
     npm build-essential git curl \
     ca-certificates apt-transport-https \
-    python3 python3-pip python3-dev \
     ripgrep && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
@@ -44,12 +43,8 @@ USER mr
 
 COPY --chown=mr:mr . .
 
-# documentation based on sphinx
-RUN pip3 install --upgrade pip
-RUN pip install -r requirements.txt
-
 # typescript build
-RUN yarn install
+RUN yarn install --dev
 RUN yarn prettier:check
 RUN yarn lint
 RUN yarn build

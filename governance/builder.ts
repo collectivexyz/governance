@@ -31,6 +31,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Mapping giving the addresses for Governance System
+ */
 interface ContractAddress {
   governanceAddress: string;
   storageAddress: string;

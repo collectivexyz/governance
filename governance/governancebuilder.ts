@@ -35,14 +35,7 @@ import Web3 from 'web3';
 import { EventData } from 'web3-eth-contract';
 import { Wallet } from './wallet';
 import { ContractAbi } from './contractabi';
-import { Builder } from './builder';
-
-interface ContractAddress {
-  governanceAddress: string;
-  storageAddress: string;
-  metaAddress: string;
-  timelockAddress: string;
-}
+import { Builder, ContractAddress } from './builder';
 
 export class GovernanceBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'GovernanceBuilder.json';
