@@ -54,7 +54,7 @@ export async function connect(): Promise<Collective> {
     const wallet = new EthWallet(privateKey, web3);
     wallet.connect();
     const builder = new GovernanceBuilder(abiPath, builderAddress, web3, wallet, maximumGas);
-    const contractAddress = await builder.discoverContractAddress(buildTransaction);
+    const contractAddress = await builder.discoverContract(buildTransaction);
     const governance = new CollectiveGovernance(abiPath, contractAddress.governanceAddress, web3, wallet, maximumGas);
     const name = await governance.name();
     const version = await governance.version();
