@@ -1,8 +1,12 @@
 # Collective Governance TypeScript API
 
+This is a typescript wrapper around the Collective Governance Contract deployed to Ethereum
+
+[Read the Docs](https://collectivexyz.github.io/governance)
+
 ### Installation
 
-### npm
+#### npm
 
 ```
  $  npm install @collectivexyz/governance
@@ -14,9 +18,43 @@
  $  yarn add @collectivexyz/governance
 ```
 
-#### Usage
+### Usage
 
-Connect an existing Governance contract from the builder address and build transaction id
+#### Simple example to connect to the governance contract.
+
+```ts
+import { EthWallet, Governance, GovernanceBuilder, CollectiveGovernance } from '@collectivexyz/governance';
+import Web3 from 'web3';
+
+export async function connect(): Promise<Governance> {
+  try {
+    const rpcUrl = 'wss://localhost:8545';
+    const privateKey = 'XXXXXXXXXXXX';
+    const abiPath = 'node_modules/@collectivexyz/governance/abi';
+    const builderAddress = '0xd64f3Db037B263D54561a2cc9885Db370B51E354';
+    const buildTransaction = '0x0f7f3e13055547b8b6ac5b28285abc960266c6297094ab451ca9de318cbf5906';
+    const maximumGas = 600000;
+
+    const web3 = new Web3(rpcUrl);
+
+    const wallet = new EthWallet(privateKey, web3);
+    wallet.connect();
+    const builder = new GovernanceBuilder(abiPath, builderAddress, web3, wallet, maximumGas);
+    const contractAddress = await builder.discoverContract(buildTransaction);
+    const governance = new CollectiveGovernance(abiPath, contractAddress.governanceAddress, web3, wallet, maximumGas);
+    const name = await governance.name();
+    const version = await governance.version();
+
+    return governance;
+  } catch (error) {
+    throw new Error('Run failed');
+  }
+}
+```
+
+#### More complete example 
+
+Connect to an existing Governance contract with a builder address and build transaction id
 
 ```ts
 import {
@@ -46,7 +84,7 @@ export async function connect(): Promise<Collective> {
     const privateKey = 'XXXXXXXXXXXX';
     const abiPath = 'node_modules/@collectivexyz/governance/abi';
     const builderAddress = '0xd64f3Db037B263D54561a2cc9885Db370B51E354';
-    const buildTransaction = '0x0f7f3e13055547b8b6ac5b28285abc960266c6297094ab451ca9de318cbf5906';    
+    const buildTransaction = '0x0f7f3e13055547b8b6ac5b28285abc960266c6297094ab451ca9de318cbf5906';
     const maximumGas = 600000;
 
     const web3 = new Web3(rpcUrl);
