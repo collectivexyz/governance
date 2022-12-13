@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy Typedoc output to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -32,6 +32,8 @@ jobs:
         uses: actions/configure-pages@v2
       - name: build docs
         run: |
+          NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }}
+          yarn install --dev
           yarn docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
