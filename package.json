@@ -1,7 +1,7 @@
 {
-  "author": "@collective",
-  "version": "0.2.13",
-  "name": "governance",
+  "author": "@collectivexyz",
+  "version": "0.2.14",
+  "name": "@collectivexyz/governance",
   "engineStrict": true,
   "license": "BSD-3-Clause",
   "description": "Governance Library",

@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@momentranks'
       #  if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
       - name: npm publish (npmjs)
         run: |

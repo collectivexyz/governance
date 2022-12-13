@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@collectivexyz'
       # if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
       - name: npm publish (github)
         run: |
