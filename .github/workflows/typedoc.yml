@@ -31,8 +31,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: build docs
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN_AUTOMATION }}
         run: |
-          NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }}
           yarn install --dev
           yarn docs
       - name: Upload artifact
