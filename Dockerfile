@@ -48,4 +48,4 @@ RUN yarn lint
 RUN yarn build
 RUN yarn test
 
-CMD echo "@momentranks/governance"
+CMD echo "@collectivexyz/governance"

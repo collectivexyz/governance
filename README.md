@@ -5,21 +5,20 @@
 ### npm
 
 ```
- $  npm install @momentranks/governance
+ $  npm install @collectivexyz/governance
 ```
 
 #### Yarn
 
 ```
- $  yarn add @momentranks/governance
+ $  yarn add @collectivexyz/governance
 ```
 
 #### Usage
 
 Connect an existing Governance contract from the builder address and build transaction id
 
-``` ts
-
+```ts
 import {
   Wallet,
   EthWallet,
@@ -30,7 +29,7 @@ import {
   CollectiveGovernance,
   MetaStorage,
   CollectiveStorage,
-} from '@momentranks/governance';
+} from '@collectivexyz/governance';
 import Web3 from 'web3';
 
 export interface Collective {
@@ -45,7 +44,7 @@ export async function connect(): Promise<Collective> {
   try {
     const rpcUrl = 'wss://localhost:8545';
     const privateKey = 'XXXXXXXXXXXX';
-    const abiPath = 'node_modules/@momentranks/governance/abi';
+    const abiPath = 'node_modules/@collectivexyz/governance/abi';
     const builderAddress = '0xd64f3Db037B263D54561a2cc9885Db370B51E354';
     const maximumGas = 600000;
     const buildTransaction = '0x0f7f3e13055547b8b6ac5b28285abc960266c6297094ab451ca9de318cbf5906';
@@ -86,5 +85,4 @@ export async function connect(): Promise<Collective> {
     throw new Error('Run failed');
   }
 }
-
 ```
