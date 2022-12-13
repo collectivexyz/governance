@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-      #  if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
       - name: npm publish (npmjs)
         run: |
           docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
           docker run --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} cat .npmrc          
           docker run -e NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
-      #  if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
