@@ -2,7 +2,10 @@
 
 This is a typescript wrapper around the Collective Governance Contract deployed to Ethereum
 
+#### Deployments
+
 [Read the Docs](https://collectivexyz.github.io/governance)
+[Release Builds](https://github.com/collectivexyz/governance/pkgs/npm/governance)
 
 ### Installation
 

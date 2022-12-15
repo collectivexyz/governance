@@ -32,7 +32,7 @@
  */
 
 /**
- * Mapping giving the addresses for Governance System
+ * Mapping giving the addresses for a Governance System
  */
 interface ContractAddress {
   governanceAddress: string;
@@ -42,24 +42,86 @@ interface ContractAddress {
 }
 
 interface Builder {
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   name(): Promise<string>;
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
+  version(): Promise<number>;
+
+  /**
+   * reset the governance builder to default state
+   * @returns Builder - this contract
+   */
   aGovernance(): Promise<Builder>;
 
+  /**
+   * set the name for the community contract
+   *
+   * @param name the community name
+   * @returns Builder - this contract
+   */
   withName(name: string): Promise<Builder>;
 
+  /**
+   * set the url on the contract
+   *
+   * @param url the community url
+   * @returns Builder - this contract
+   */
   withUrl(url: string): Promise<Builder>;
 
+  /**
+   * set the description on the contract
+   *
+   * @param desc the description
+   * @returns Builder - this contract
+   */
   withDescription(desc: string): Promise<Builder>;
 
+  /**
+   * Add a community supervisor address to the project.  It is okay to call this method
+   * more than once.  Each supervisor is added.
+   *
+   * @param supervisor address for the supervisor account
+   * @returns Builder - this contract
+   */
   withSupervisor(supervisor: string): Promise<Builder>;
 
+  /**
+   * set the community VoterClass
+   *
+   * @param voterClass the address of the VoterClass contract
+   * @returns Builder - this contract
+   */
   withVoterClassAddress(voterClass: string): Promise<Builder>;
 
+  /**
+   * set the minimum voting duration for the community
+   *
+   * @param duration the time in seconds
+   * @returns Builder - this contract
+   */
   withMinimumDuration(duration: number): Promise<Builder>;
 
+  /**
+   * Build the contract with the configured settings.
+   *
+   * @returns string - The address of the newly created contract
+   */
   build(): Promise<string>;
 
+  /**
+   * Helper to discover the contract suite built by a previous invocation of this contract
+   *
+   * @param txId The transaction bearing the build call
+   * @returns ContractAddress - The set of contracts constructed by the build
+   */
   discoverContract(txId: string): Promise<ContractAddress>;
 }
 

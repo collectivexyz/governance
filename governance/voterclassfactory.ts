@@ -34,6 +34,9 @@ import { Contract, EventData } from 'web3-eth-contract';
 import { ContractAbi } from './contractabi';
 import { Wallet } from './wallet';
 
+/**
+ * API Wrapper around the VoterClass Factory
+ */
 export class VoterClassFactory extends ContractAbi {
   static ABI_NAME = 'VoterClassFactory.json';
 
@@ -46,6 +49,14 @@ export class VoterClassFactory extends ContractAbi {
     this.gas = gas;
   }
 
+  /**
+   * Create a VoterClass based on a project address
+   *
+   * @param projectAddress ERC-721 token
+   * @param weight - weight of each vote, for example 1
+   *
+   * @returns string - the address of the VoterClass
+   */
   async createERC721(projectAddress: string, weight: number): Promise<string> {
     this.logger.debug(`Sending createERC721 to ${projectAddress}`);
     const tx = await this.contract.methods.createERC721(projectAddress, weight).send({

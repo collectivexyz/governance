@@ -31,25 +31,89 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Interface for Collective Storage
+ */
 interface Storage {
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   name(): Promise<string>;
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
   version(): Promise<number>;
 
+  /**
+   * get the current quorum required for a vote to pass
+   *
+   * @param proposalId The id of the vote
+   * @returns number - the quorum
+   */
   quorumRequired(proposalId: number): Promise<number>;
 
+  /**
+   * get the delay for this vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds
+   */
   voteDelay(proposalId: number): Promise<number>;
 
+  /**
+   * get the amount of time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds
+   */
   voteDuration(proposalId: number): Promise<number>;
 
+  /**
+   * get the start time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds referenced from the unix epoch, January 1, 1970
+   */
   startTime(proposalId: number): Promise<number>;
 
+  /**
+   * get the end time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds referenced from the unix epoch, January 1, 1970
+   */
   endTime(proposalId: number): Promise<number>;
 
+  /**
+   * Get the winning choice for a choice vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The id of the winning choice
+   */
   getWinningChoice(proposalId: number): Promise<number>;
 
+  /**
+   * get the number of choices for a choice vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of choices
+   */
   choiceCount(proposalId: number): Promise<number>;
 
+  /**
+   * get the choice parameterization for a specific choice
+   *
+   * @param proposalId The id of the vote
+   * @param choiceId The id of the choice
+   *
+   * @returns string - the name
+   * @returns string - the description
+   * @returns number - the transactionId
+   * @returns number - the vote count
+   */
   getChoice(
     proposalId: number,
     choiceId: number

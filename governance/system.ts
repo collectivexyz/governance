@@ -35,6 +35,9 @@ import Web3 from 'web3';
 import { Wallet } from './wallet';
 import { ContractAbi } from './contractabi';
 
+/**
+ * API Wrapper for CollectiveGovernance System Creator
+ */
 export class System extends ContractAbi {
   static ABI_NAME = 'System.json';
 
@@ -47,6 +50,17 @@ export class System extends ContractAbi {
     this.gas = gas;
   }
 
+  /**
+   * Create a Collective Governance contract with the specified parameterization
+   *
+   * @param name The community name
+   * @param url The community url
+   * @param description The community description
+   * @param erc721contract The address of the erc721 governance token
+   * @param quorum The required quorum for the community
+   *
+   * @returns string - The transaction hash for the build
+   */
   async create(name: string, url: string, description: string, erc721contract: string, quorum: number): Promise<string> {
     this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}`);
     const encodedName = this.web3.utils.asciiToHex(name);
@@ -60,6 +74,19 @@ export class System extends ContractAbi {
     return buildTx.transactionHash;
   }
 
+  /**
+   * Create a Collective Governance contract with the specified parameterization
+   * 
+   * @param name The community name
+   * @param url The community url
+   * @param description The community description
+   * @param erc721contract The address of the erc721 governance token
+   * @param quorum The required quorum for the community
+   * @param delay The required voting delay
+   * @param duration the required voting duration
+   *
+   * @returns string - The transaction hash for the build
+   */
   async createWithDelay(
     name: string,
     url: string,

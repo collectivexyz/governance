@@ -1,7 +1,7 @@
 ARG VERSION=stable-slim
 FROM debian:${VERSION}
 ARG NPM_TOKEN
-ARG PROJECT=collectivexyz_governance
+ARG PROJECT=governance
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \

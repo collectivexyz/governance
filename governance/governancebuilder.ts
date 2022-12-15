@@ -36,7 +36,11 @@ import { EventData } from 'web3-eth-contract';
 import { Wallet } from './wallet';
 import { ContractAbi } from './contractabi';
 import { Builder, ContractAddress } from './builder';
+import { parseIntOrThrow } from './version';
 
+/**
+ * API Wrapper for GovernanceBuilder contract
+ */
 export class GovernanceBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'GovernanceBuilder.json';
 
@@ -49,11 +53,28 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     this.gas = gas;
   }
 
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   async name(): Promise<string> {
     const name = await this.contract.methods.name().call();
     return name;
   }
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
+  async version(): Promise<number> {
+    const version = await this.contract.methods.version().call();
+    return parseIntOrThrow(version);
+  }
+
+  /**
+   * reset the governance builder to default state
+   * @returns Builder - this contract
+   */
   async aGovernance(): Promise<Builder> {
     this.logger.info('Governance Builder Started');
     const tx = await this.contract.methods.aGovernance().send({
@@ -64,6 +85,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * set the name for the community contract
+   *
+   * @param name the community name
+   * @returns Builder - this contract
+   */
   async withName(name: string): Promise<Builder> {
     this.logger.info(`withName ${name}`);
     const encodedName = this.web3.utils.asciiToHex(name);
@@ -75,6 +102,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * set the url on the contract
+   *
+   * @param url the community url
+   * @returns Builder - this contract
+   */
   async withUrl(url: string): Promise<Builder> {
     this.logger.info(`withUrl ${url}`);
     const tx = await this.contract.methods.withUrl(url).send({
@@ -85,6 +118,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * set the description on the contract
+   *
+   * @param desc the description
+   * @returns Builder - this contract
+   */
   async withDescription(desc: string): Promise<Builder> {
     this.logger.info(`withDescription ${desc}`);
     const tx = await this.contract.methods.withDescription(desc).send({
@@ -95,6 +134,13 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * Add a community supervisor address to the project.  It is okay to call this method
+   * more than once.  Each supervisor is added.
+   *
+   * @param supervisor address for the supervisor account
+   * @returns Builder - this contract
+   */
   async withSupervisor(supervisor: string): Promise<Builder> {
     this.logger.info(`withSupervisor ${supervisor}`);
     const tx = await this.contract.methods.withSupervisor(supervisor).send({
@@ -105,6 +151,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * set the community VoterClass
+   *
+   * @param voterClass the address of the VoterClass contract
+   * @returns Builder - this contract
+   */
   async withVoterClassAddress(voterClass: string): Promise<Builder> {
     this.logger.info(`withVoterClass ${voterClass}`);
     const tx = await this.contract.methods.withVoterClassAddress(voterClass).send({
@@ -115,6 +167,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * set the minimum voting duration for the community
+   *
+   * @param duration the time in seconds
+   * @returns Builder - this contract
+   */
   async withMinimumDuration(duration: number): Promise<Builder> {
     this.logger.info(`withMinimumDuration ${duration}`);
     const tx = await this.contract.methods.withMinimumDuration(duration).send({
@@ -125,6 +183,11 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     return this;
   }
 
+  /**
+   * Build the contract with the configured settings.
+   *
+   * @returns string - The address of the newly created contract
+   */
   async build(): Promise<string> {
     this.logger.info('Building Governance');
     const buildTx = await this.contract.methods.build().send({
@@ -141,6 +204,12 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
     throw new Error('Unknown Governance created');
   }
 
+  /**
+   * Helper to discover the contract suite built by a previous invocation of this contract
+   *
+   * @param txId The transaction bearing the build call
+   * @returns ContractAddress - The set of contracts constructed by the build
+   */
   async discoverContract(txId: string): Promise<ContractAddress> {
     const tx = await this.web3.eth.getTransaction(txId);
     if (!tx.blockNumber) {

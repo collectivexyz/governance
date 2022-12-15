@@ -31,22 +31,80 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Interface for the Collective Metadata Storage contract
+ */
 interface Meta {
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   name(): Promise<string>;
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
   version(): Promise<number>;
 
+  /**
+   * Get the community name
+   *
+   * @returns string - The name
+   */
   community(): Promise<string>;
 
+  /**
+   * Get the community description
+   *
+   * @returns string - the description
+   */
   description(): Promise<string>;
 
+  /**
+   * Get the community url
+   *
+   * @returns string - the url
+   */
   url(): Promise<string>;
 
+  /**
+   * Get the description of a vote by id
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns string - The description
+   */
   getMetaDescription(proposalId: number): Promise<string>;
 
+  /**
+   * Get the url of a vote by id
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns string - The url
+   */
   getMetaUrl(proposalId: number): Promise<string>;
 
+  /**
+   * Get arbitrary metadata stored on a particular proposal
+   *
+   * @param proposalId The id of the vote
+   * @param metaId The id of the metadata
+   *
+   * @returns string - the name of the metadata
+   * @returns string - the value of the metadata
+   */
   getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }>;
+
+  /**
+   * Get the number of stored metadata elements on the vote
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns number - The number of elements
+   */
+  metaCount(proposalId: number): Promise<number>;
 }
 
 export { Meta };

@@ -34,11 +34,17 @@
 import Web3 from 'web3';
 import { getKeyAsEthereumKey } from '../system/abi';
 
+/**
+ * Abstraction for an Ethereum wallet
+ */
 export interface Wallet {
   getAddress(): string;
   connect(): void;
 }
 
+/**
+ * Implementation of an Ethereum wallet
+ */
 export class EthWallet implements Wallet {
   private readonly walletAddress;
   private readonly account: any;

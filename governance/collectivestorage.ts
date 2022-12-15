@@ -36,58 +36,126 @@ import { ContractAbi } from './contractabi';
 import { Storage } from './storage';
 import { parseIntOrThrow } from './version';
 
+/**
+ * API Wrapper for CollectiveStorage contract
+ */
 export class CollectiveStorage extends ContractAbi implements Storage {
   static ABI_NAME = 'Storage.json';
 
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   constructor(abiPath: string, contractAddress: string, web3: Web3) {
     super(abiPath, CollectiveStorage.ABI_NAME, contractAddress, web3);
   }
 
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   async name(): Promise<string> {
     const name = await this.contract.methods.name().call();
     return name;
   }
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
     return parseIntOrThrow(version);
   }
 
+  /**
+   * get the current quorum required for a vote to pass
+   *
+   * @param proposalId The id of the vote
+   * @returns number - the quorum
+   */
   async quorumRequired(proposalId: number): Promise<number> {
     const quorum = await this.contract.methods.quorumRequired(proposalId).call();
     return parseIntOrThrow(quorum);
   }
 
+  /**
+   * get the delay for this vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds
+   */
   async voteDelay(proposalId: number): Promise<number> {
     const delay = await this.contract.methods.voteDelay(proposalId).call();
     return parseIntOrThrow(delay);
   }
 
+  /**
+   * get the amount of time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds
+   */
   async voteDuration(proposalId: number): Promise<number> {
     const duration = await this.contract.methods.voteDuration(proposalId).call();
     return parseIntOrThrow(duration);
   }
 
+  /**
+   * get the start time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds referenced from the unix epoch, January 1, 1970
+   */
   async startTime(proposalId: number): Promise<number> {
     const timeStr = await this.contract.methods.startTime(proposalId).call();
     return parseIntOrThrow(timeStr);
   }
 
+  /**
+   * get the end time for the vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of seconds referenced from the unix epoch, January 1, 1970
+   */
   async endTime(proposalId: number): Promise<number> {
     const timeStr = await this.contract.methods.endTime(proposalId).call();
     return parseIntOrThrow(timeStr);
   }
 
+  /**
+   * Get the winning choice for a choice vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The id of the winning choice
+   */
   async getWinningChoice(proposalId: number): Promise<number> {
     const choiceNum = await this.contract.methods.getWinningChoice(proposalId).call();
     return parseIntOrThrow(choiceNum);
   }
 
+  /**
+   * get the number of choices for a choice vote
+   *
+   * @param proposalId The id of the vote
+   * @returns number - The number of choices
+   */
   async choiceCount(proposalId: number): Promise<number> {
     const choiceCount = await this.contract.methods.choiceCount(proposalId).call();
     return parseIntOrThrow(choiceCount);
   }
 
+  /**
+   * get the choice parameterization for a specific choice
+   *
+   * @param proposalId The id of the vote
+   * @param choiceId The id of the choice
+   *
+   * @returns string - the name
+   * @returns string - the description
+   * @returns number - the transactionId
+   * @returns number - the vote count
+   */
   async getChoice(
     proposalId: number,
     choiceId: number

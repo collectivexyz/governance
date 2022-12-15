@@ -43,43 +43,100 @@ export class MetaStorage extends ContractAbi implements Meta {
     super(abiPath, MetaStorage.ABI_NAME, contractAddress, web3);
   }
 
+  /**
+   * get the contract name
+   * @returns string - contract anme
+   */
   async name(): Promise<string> {
     const name = await this.contract.methods.name().call();
     return name;
   }
 
+  /**
+   * get the contract version
+   * @returns number - the version
+   */
   async version(): Promise<number> {
     const version = await this.contract.methods.version().call();
     return parseIntOrThrow(version);
   }
 
+  /**
+   * Get the community name
+   *
+   * @returns string - The name
+   */
   async community(): Promise<string> {
     const communityHexEnc = await this.contract.methods.community().call();
     const community = this.web3.utils.hexToAscii(communityHexEnc);
     return community;
   }
 
+  /**
+   * Get the community description
+   *
+   * @returns string - the description
+   */
   async description(): Promise<string> {
     const description = await this.contract.methods.description().call();
     return description;
   }
 
+  /**
+   * Get the community url
+   *
+   * @returns string - the url
+   */
   async url(): Promise<string> {
     const description = await this.contract.methods.url().call();
     return description;
   }
 
+  /**
+   * Get the description of a vote by id
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns string - The description
+   */
   async getMetaDescription(proposalId: number): Promise<string> {
     return await this.contract.methods.description(proposalId).call();
   }
 
+  /**
+   * Get the url of a vote by id
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns string - The url
+   */
   async getMetaUrl(proposalId: number): Promise<string> {
     return await this.contract.methods.url(proposalId).call();
   }
 
+  /**
+   * Get arbitrary metadata stored on a particular proposal
+   *
+   * @param proposalId The id of the vote
+   * @param metaId The id of the metadata
+   *
+   * @returns string - the name of the metadata
+   * @returns string - the value of the metadata
+   */
   async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
     const metaData = await this.contract.methods.getMeta(proposalId, metaId).call();
     const decodedName = this.web3.utils.hexToAscii(metaData[0]);
     return { name: decodedName, value: metaData[1] };
+  }
+
+  /**
+   * Get the number of stored metadata elements on the vote
+   *
+   * @param proposalId The id of the vote
+   *
+   * @returns number - The number of elements
+   */
+  async metaCount(proposalId: number): Promise<number> {
+    return await this.contract.methods.metaCount(proposalId).call();
   }
 }

@@ -31,6 +31,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Fail fast version of parse int.   Either its a number or throw
+ * @param num String representation of an integer
+ *
+ * @returns A number
+ *
+ * @throws Error if not a number
+ */
 export function parseIntOrThrow(num: string): number {
   const n = parseInt(num);
   if (isNaN(n)) {

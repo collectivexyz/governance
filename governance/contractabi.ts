@@ -36,7 +36,10 @@ import { LoggerFactory } from '../system/logging';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 
-export class ContractAbi {
+/**
+ * Abstract class implementation based on a ABI specification
+ */
+export abstract class ContractAbi {
   protected readonly logger = LoggerFactory.getLogger(module.filename);
 
   public readonly contractAddress: string;
