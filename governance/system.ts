@@ -76,7 +76,7 @@ export class System extends ContractAbi {
 
   /**
    * Create a Collective Governance contract with the specified parameterization
-   * 
+   *
    * @param name The community name
    * @param url The community url
    * @param description The community description

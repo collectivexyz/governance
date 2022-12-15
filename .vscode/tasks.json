@@ -10,10 +10,17 @@
       "group": "build"
     },
     {
+      "label": "prettier",
+      "type": "shell",
+      "command": "yarn prettier:check",
+      "dependsOn": "install",
+      "group": "build"
+    },
+    {
       "label": "lint",
       "type": "shell",
       "command": "yarn lint",
-      "dependsOn": "install",
+      "dependsOn": "prettier",
       "group": "build"
     },
     {
