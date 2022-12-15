@@ -4,8 +4,8 @@ This is a typescript wrapper around the Collective Governance Contract deployed 
 
 #### Deployments
 
-[Read the Docs](https://collectivexyz.github.io/governance)
-[Release Builds](https://github.com/collectivexyz/governance/pkgs/npm/governance)
+- [Read the Docs](https://collectivexyz.github.io/governance)
+- [Release Builds](https://github.com/collectivexyz/governance/pkgs/npm/governance)
 
 ### Installation
 
@@ -55,7 +55,7 @@ export async function connect(): Promise<Governance> {
 }
 ```
 
-#### More complete example 
+#### More complete example
 
 Connect to an existing Governance contract with a builder address and build transaction id
 
