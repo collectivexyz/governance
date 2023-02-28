@@ -3,22 +3,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "baseFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minimumBaseFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "BaseFeeRebateMustBeLarger",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
       },
@@ -29,22 +13,6 @@
       }
     ],
     "name": "CancelNotPossible",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "gasUsedRebate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minimumRebate",
-        "type": "uint256"
-      }
-    ],
-    "name": "GasUsedRebateMustBeLarger",
     "type": "error"
   },
   {
@@ -119,22 +87,6 @@
         "type": "address"
       }
     ],
-    "name": "NotVoter",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "proposalId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
     "name": "ProposalNotSender",
     "type": "error"
   },
@@ -147,11 +99,6 @@
       }
     ],
     "name": "QuorumNotConfigured",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SupervisorListEmpty",
     "type": "error"
   },
   {
@@ -344,31 +291,6 @@
       },
       {
         "indexed": false,
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "url",
-        "type": "string"
-      }
-    ],
-    "name": "ProposalDescription",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "proposalId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "executedTransactionCount",
         "type": "uint256"
@@ -394,43 +316,6 @@
       }
     ],
     "name": "ProposalFinal",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "proposalId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "metaId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "value",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "ProposalMeta",
     "type": "event"
   },
   {
@@ -688,11 +573,16 @@
       },
       {
         "internalType": "string",
-        "name": "_value",
+        "name": "_description",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_transactionId",
+        "type": "uint256"
       }
     ],
-    "name": "addMeta",
+    "name": "addChoice",
     "outputs": [
       {
         "internalType": "uint256",
@@ -761,19 +651,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "community",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -825,31 +702,27 @@
         "internalType": "uint256",
         "name": "_proposalId",
         "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "_description",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_url",
-        "type": "string"
       }
     ],
-    "name": "describe",
+    "name": "endVote",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "description",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_proposalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isOpen",
     "outputs": [
       {
-        "internalType": "string",
+        "internalType": "bool",
         "name": "",
-        "type": "string"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -866,25 +739,6 @@
       }
     ],
     "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_choiceCount",
-        "type": "uint256"
-      }
-    ],
-    "name": "propose",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -906,29 +760,9 @@
         "internalType": "uint256",
         "name": "_proposalId",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_choiceId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_name",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "_description",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_transactionId",
-        "type": "uint256"
       }
     ],
-    "name": "setChoice",
+    "name": "startVote",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -947,19 +781,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "url",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
       }
     ],
     "stateMutability": "view",

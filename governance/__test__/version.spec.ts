@@ -1,4 +1,4 @@
-import { parseIntOrThrow } from '../version';
+import { parseIntOrThrow } from '../../system/version';
 
 describe('parseIntOrThrow', () => {
   it('must parse a proper number', () => {

@@ -94,20 +94,12 @@ interface Builder {
   withSupervisor(supervisor: string): Promise<Builder>;
 
   /**
-   * set the community VoterClass
+   * set the Community Class
    *
-   * @param voterClass the address of the VoterClass contract
+   * @param voterClass the address of the CommunityClass contract
    * @returns Builder - this contract
    */
-  withVoterClassAddress(voterClass: string): Promise<Builder>;
-
-  /**
-   * set the minimum voting duration for the community
-   *
-   * @param duration the time in seconds
-   * @returns Builder - this contract
-   */
-  withMinimumDuration(duration: number): Promise<Builder>;
+  withCommunityClassAddress(voterClass: string): Promise<Builder>;
 
   /**
    * Build the contract with the configured settings.

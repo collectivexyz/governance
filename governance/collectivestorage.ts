@@ -32,9 +32,9 @@
  */
 
 import Web3 from 'web3';
-import { ContractAbi } from './contractabi';
+import { ContractAbi } from '../system/contractabi';
 import { Storage } from './storage';
-import { parseIntOrThrow } from './version';
+import { parseIntOrThrow } from '../system/version';
 
 /**
  * API Wrapper for CollectiveStorage contract

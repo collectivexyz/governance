@@ -55,42 +55,14 @@ interface Governance {
   propose(): Promise<number>;
 
   /**
-   * propose a new vote with choices
-   *
-   * @param choiceCount The number of choices
-   *
-   * @returns number - The id of the proposal
-   */
-  choiceVote(choiceCount: number): Promise<number>;
-
-  /**
    * set a choice for the choice vote
    * @param proposalId The id of the vote
-   * @param choiceId The id of the choice
    * @param name The name for the choice
    * @param description The choice description
    * @param transactionId The transaction id to associate with the choice.  This transaction will execute if the given choice wins.
+   * @returns number The id of the added choice
    */
-  setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void>;
-
-  /**
-   * describe a vote
-   * @param proposalId The id of the vote
-   * @param description The description of the vote
-   * @param url The url for the vote
-   */
-  describe(proposalId: number, description: string, url: string): Promise<void>;
-
-  /**
-   * Add custom metadata to a vote
-   *
-   * @param proposalId The id of the vote
-   * @param name the name for the customized data
-   * @param value the value of the customized data
-   *
-   * @returns number - the metadata id of the attached metadata
-   */
-  addMeta(proposalId: number, name: string, value: string): Promise<number>;
+  addChoice(proposalId: number, name: string, description: string, transactionId: number): Promise<number>;
 
   /**
    * attach a transaction to the vote
@@ -160,6 +132,13 @@ interface Governance {
   cancel(proposalId: number): Promise<void>;
 
   /**
+   * veto the specified proposal
+   *
+   * @param proposalId The id to veto
+   */
+  veto(proposalId: number): Promise<void>;
+
+  /**
    * vote in favor
    *
    * @param proposalId The id of the vote
@@ -210,21 +189,6 @@ interface Governance {
    * @param proposalId The id of the vote
    */
   abstainWithToken(proposalId: number, tokenId: number): Promise<void>;
-
-  /**
-   * undo for all shares
-   *
-   * @param proposalId The id of the vote
-   */
-  undoVote(proposalId: number): Promise<void>;
-
-  /**
-   * undo with the specified token
-   *
-   * @param proposalId The id of the vote
-   * @param tokenId the id of the token
-   */
-  undoVoteWithToken(proposalId: number, tokenId: number): Promise<void>;
 
   /**
    * determine if the given vote succeeded

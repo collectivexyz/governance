@@ -33,11 +33,11 @@
 
 import Web3 from 'web3';
 import { Contract, EventData } from 'web3-eth-contract';
-import { Wallet } from './wallet';
+import { Wallet } from '../system/wallet';
 import { loadAbi, pathWithSlash } from '../system/abi';
 import { LoggerFactory } from '../system/logging';
 import { Governance } from './governance';
-import { parseIntOrThrow } from './version';
+import { parseIntOrThrow } from '../system/version';
 
 /**
  * API Wrapper for CollectiveGovernance contract
@@ -111,39 +111,22 @@ export class CollectiveGovernance implements Governance {
   }
 
   /**
-   * propose a new vote with choices
-   *
-   * @param choiceCount The number of choices
-   *
-   * @returns number - The id of the proposal
-   */
-  async choiceVote(choiceCount: number): Promise<number> {
-    this.logger.debug(`Propose choice vote: ${choiceCount}`);
-    const proposeTx = await this.contract.methods.propose(choiceCount).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(proposeTx);
-    const event: EventData = proposeTx.events['ProposalCreated'];
-    return parseIntOrThrow(event.returnValues['proposalId']);
-  }
-
-  /**
    * set a choice for the choice vote
    * @param proposalId The id of the vote
-   * @param choiceId The id of the choice
    * @param name The name for the choice
    * @param description The choice description
    * @param transactionId The transaction id to associate with the choice.  This transaction will execute if the given choice wins.
    */
-  async setChoice(proposalId: number, choiceId: number, name: string, description: string, transactionId: number): Promise<void> {
-    this.logger.info(`choice: ${proposalId}, ${choiceId}, ${name}, ${description}, ${transactionId}}`);
+  async addChoice(proposalId: number, name: string, description: string, transactionId: number): Promise<number> {
+    this.logger.info(`choice: ${proposalId}, ${name}, ${description}, ${transactionId}}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.setChoice(proposalId, choiceId, encodedName, description, transactionId).send({
+    const tx = await this.contract.methods.setChoice(proposalId, encodedName, description, transactionId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });
     this.logger.info(tx);
+    const event: EventData = tx.events['ProposalChoice'];
+    return parseIntOrThrow(event.returnValues['_choiceId']);
   }
 
   /**
@@ -291,6 +274,20 @@ export class CollectiveGovernance implements Governance {
   async cancel(proposalId: number): Promise<void> {
     this.logger.debug(`cancel: ${proposalId}`);
     const endTx = await this.contract.methods.cancel(proposalId).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(endTx);
+  }
+
+  /**
+   * veto the specified proposal
+   *
+   * @param proposalId The id to veto
+   */
+  async veto(proposalId: number): Promise<void> {
+    this.logger.debug(`veto: ${proposalId}`);
+    const endTx = await this.contract.methods.veto(proposalId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });

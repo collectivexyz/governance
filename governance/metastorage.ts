@@ -32,9 +32,9 @@
  */
 
 import Web3 from 'web3';
-import { ContractAbi } from './contractabi';
+import { ContractAbi } from '../system/contractabi';
 import { Meta } from './meta';
-import { parseIntOrThrow } from './version';
+import { parseIntOrThrow } from '../system/version';
 
 export class MetaStorage extends ContractAbi implements Meta {
   static ABI_NAME = 'MetaStorage.json';

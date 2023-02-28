@@ -18,23 +18,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      }
-    ],
-    "name": "NotGovernanceCreator",
-    "type": "error"
-  },
-  {
-    "inputs": [
+        "internalType": "uint256",
+        "name": "expected",
+        "type": "uint256"
+      },
       {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "provided",
+        "type": "uint256"
       }
     ],
-    "name": "NotVoterClassCreator",
+    "name": "VersionInvalid",
     "type": "error"
   },
   {
@@ -74,32 +68,6 @@
   },
   {
     "inputs": [],
-    "name": "MINIMUM_DELAY",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MINIMUM_DURATION",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "NAME",
     "outputs": [
       {
@@ -135,17 +103,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_quorum",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minimumDelay",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minimumDuration",
+        "name": "_quorumRequirement",
         "type": "uint256"
       }
     ],
@@ -194,8 +152,18 @@
       },
       {
         "internalType": "uint256",
-        "name": "_quorum",
+        "name": "_tokenRequirement",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_quorumRequirement",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isClosed",
+        "type": "bool"
       }
     ],
     "name": "create",

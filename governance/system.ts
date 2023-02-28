@@ -32,8 +32,8 @@
  */
 
 import Web3 from 'web3';
-import { Wallet } from './wallet';
-import { ContractAbi } from './contractabi';
+import { Wallet } from '../system/wallet';
+import { ContractAbi } from '../system/contractabi';
 
 /**
  * API Wrapper for CollectiveGovernance System Creator

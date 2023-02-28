@@ -1,6 +1,6 @@
 export * from './governance';
 export * from './collectivegovernance';
-export * from './contractabi';
+export * from '../system/contractabi';
 export * from './builder';
 export * from './governancebuilder';
 export * from './meta';
@@ -8,5 +8,4 @@ export * from './metastorage';
 export * from './system';
 export * from './storage';
 export * from './collectivestorage';
-export * from './voterclassfactory';
-export * from './wallet';
+export * from './proposalbuilder';

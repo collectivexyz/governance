@@ -33,10 +33,10 @@
 
 import Web3 from 'web3';
 import { EventData } from 'web3-eth-contract';
-import { Wallet } from './wallet';
-import { ContractAbi } from './contractabi';
-import { Builder, ContractAddress } from './builder';
-import { parseIntOrThrow } from './version';
+import { Wallet } from '../system/wallet';
+import { ContractAbi } from '../system/contractabi';
+import { Builder, ContractAddress } from '../governance/builder';
+import { parseIntOrThrow } from '../system/version';
 
 /**
  * API Wrapper for GovernanceBuilder contract
@@ -152,14 +152,14 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
   }
 
   /**
-   * set the community VoterClass
+   * set the Community Class
    *
-   * @param voterClass the address of the VoterClass contract
+   * @param voterClass the address of the CommunityClass contract
    * @returns Builder - this contract
    */
-  async withVoterClassAddress(voterClass: string): Promise<Builder> {
-    this.logger.info(`withVoterClass ${voterClass}`);
-    const tx = await this.contract.methods.withVoterClassAddress(voterClass).send({
+  async withCommunityClassAddress(voterClass: string): Promise<Builder> {
+    this.logger.info(`withCommunityClassAddress ${voterClass}`);
+    const tx = await this.contract.methods.withCommunityClassAddress(voterClass).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });

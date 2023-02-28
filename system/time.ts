@@ -32,7 +32,7 @@
  */
 
 import Web3 from 'web3';
-import { parseIntOrThrow } from '../governance/version';
+import { parseIntOrThrow } from '../system/version';
 
 export function timeNow(): number {
   return Math.floor(Date.now() / 1000);

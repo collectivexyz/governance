@@ -41,6 +41,7 @@
     "dist/",
     "system",
     "governance",
+    "community",
     "README.md",
     "index.ts",
     "abi",
