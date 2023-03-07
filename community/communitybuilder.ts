@@ -281,7 +281,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
     this.logger.info(buildTx);
 
     const event: EventData = buildTx.events['CommunityClassCreated'];
-    const classAddress = event.returnValues['classAddress'];
+    const classAddress = event.returnValues['class'];
     if (classAddress) {
       return classAddress;
     }

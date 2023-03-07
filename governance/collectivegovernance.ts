@@ -130,42 +130,6 @@ export class CollectiveGovernance implements Governance {
   }
 
   /**
-   * describe a vote
-   * @param proposalId The id of the vote
-   * @param description The description of the vote
-   * @param url The url for the vote
-   */
-  async describe(proposalId: number, description: string, url: string): Promise<void> {
-    this.logger.debug(`describe: ${proposalId}, ${description}, ${url}`);
-    const tx = await this.contract.methods.describe(proposalId, description, url).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(tx);
-  }
-
-  /**
-   * Add custom metadata to a vote
-   *
-   * @param proposalId The id of the vote
-   * @param name the name for the customized data
-   * @param value the value of the customized data
-   *
-   * @returns number - the metadata id of the attached metadata
-   */
-  async addMeta(proposalId: number, name: string, value: string): Promise<number> {
-    this.logger.debug(`addMeta: ${proposalId}, ${name}, ${value}`);
-    const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.addMeta(proposalId, encodedName, value).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(tx);
-    const event: EventData = tx.events['ProposalMeta'];
-    return parseIntOrThrow(event.returnValues['metaId']);
-  }
-
-  /**
    * attach a transaction to the vote
    *
    * @param proposalId The id of the vote to attach to
@@ -235,7 +199,7 @@ export class CollectiveGovernance implements Governance {
    * @returns boolean - True if vote is open
    */
   async isOpen(proposalId: number): Promise<boolean> {
-    return await this.strategy.methods.isOpen(proposalId).call();
+    return await this.contract.methods.isOpen(proposalId).call();
   }
 
   /**
@@ -245,7 +209,7 @@ export class CollectiveGovernance implements Governance {
    */
   async startVote(proposalId: number): Promise<void> {
     this.logger.debug(`start vote: ${proposalId}`);
-    const openTx = await this.strategy.methods.startVote(proposalId).send({
+    const openTx = await this.contract.methods.startVote(proposalId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });
@@ -259,7 +223,7 @@ export class CollectiveGovernance implements Governance {
    */
   async endVote(proposalId: number): Promise<void> {
     this.logger.debug(`end vote: ${proposalId}`);
-    const endTx = await this.strategy.methods.endVote(proposalId).send({
+    const endTx = await this.contract.methods.endVote(proposalId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });
@@ -287,7 +251,7 @@ export class CollectiveGovernance implements Governance {
    */
   async veto(proposalId: number): Promise<void> {
     this.logger.debug(`veto: ${proposalId}`);
-    const endTx = await this.contract.methods.veto(proposalId).send({
+    const endTx = await this.strategy.methods.veto(proposalId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });
@@ -389,35 +353,6 @@ export class CollectiveGovernance implements Governance {
   async abstainWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`abstain for ${proposalId}, ${tokenId}`);
     const voteTx = await this.strategy.methods.abstainFrom(proposalId, tokenId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(voteTx);
-  }
-
-  /**
-   * undo for all shares
-   *
-   * @param proposalId The id of the vote
-   */
-  async undoVote(proposalId: number): Promise<void> {
-    this.logger.debug(`undoVote: ${proposalId}`);
-    const voteTx = await this.strategy.methods.undoVote(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(voteTx);
-  }
-
-  /**
-   * undo with the specified token
-   *
-   * @param proposalId The id of the vote
-   * @param tokenId the id of the token
-   */
-  async undoVoteWithToken(proposalId: number, tokenId: number): Promise<void> {
-    this.logger.debug(`abstain for ${proposalId}, ${tokenId}`);
-    const voteTx = await this.strategy.methods.undoVote(proposalId, tokenId).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });

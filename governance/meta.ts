@@ -47,8 +47,7 @@ interface Meta {
    */
   version(): Promise<number>;
 
-  /**
-   * Get the community name
+  /** * Get the community name
    *
    * @returns string - The name
    */
@@ -75,7 +74,7 @@ interface Meta {
    *
    * @returns string - The description
    */
-  getMetaDescription(proposalId: number): Promise<string>;
+  getDescription(proposalId: number): Promise<string>;
 
   /**
    * Get the url of a vote by id
@@ -84,7 +83,7 @@ interface Meta {
    *
    * @returns string - The url
    */
-  getMetaUrl(proposalId: number): Promise<string>;
+  getUrl(proposalId: number): Promise<string>;
 
   /**
    * Get arbitrary metadata stored on a particular proposal
@@ -95,7 +94,7 @@ interface Meta {
    * @returns string - the name of the metadata
    * @returns string - the value of the metadata
    */
-  getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }>;
+  get(proposalId: number, metaId: number): Promise<{ name: string; value: string }>;
 
   /**
    * Get the number of stored metadata elements on the vote

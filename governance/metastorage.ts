@@ -99,7 +99,7 @@ export class MetaStorage extends ContractAbi implements Meta {
    *
    * @returns string - The description
    */
-  async getMetaDescription(proposalId: number): Promise<string> {
+  async getDescription(proposalId: number): Promise<string> {
     return await this.contract.methods.description(proposalId).call();
   }
 
@@ -110,7 +110,7 @@ export class MetaStorage extends ContractAbi implements Meta {
    *
    * @returns string - The url
    */
-  async getMetaUrl(proposalId: number): Promise<string> {
+  async getUrl(proposalId: number): Promise<string> {
     return await this.contract.methods.url(proposalId).call();
   }
 
@@ -123,8 +123,8 @@ export class MetaStorage extends ContractAbi implements Meta {
    * @returns string - the name of the metadata
    * @returns string - the value of the metadata
    */
-  async getMeta(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
-    const metaData = await this.contract.methods.getMeta(proposalId, metaId).call();
+  async get(proposalId: number, metaId: number): Promise<{ name: string; value: string }> {
+    const metaData = await this.contract.methods.get(proposalId, metaId).call();
     const decodedName = this.web3.utils.hexToAscii(metaData[0]);
     return { name: decodedName, value: metaData[1] };
   }

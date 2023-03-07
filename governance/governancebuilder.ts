@@ -168,22 +168,6 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
   }
 
   /**
-   * set the minimum voting duration for the community
-   *
-   * @param duration the time in seconds
-   * @returns Builder - this contract
-   */
-  async withMinimumDuration(duration: number): Promise<Builder> {
-    this.logger.info(`withMinimumDuration ${duration}`);
-    const tx = await this.contract.methods.withMinimumDuration(duration).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
-    this.logger.info(tx);
-    return this;
-  }
-
-  /**
    * Build the contract with the configured settings.
    *
    * @returns string - The address of the newly created contract
