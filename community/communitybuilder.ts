@@ -157,7 +157,24 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withVoter(voter: string): Promise<Builder> {
     this.logger.info(`withVoter ${voter}`);
-    const tx = await this.contract.methods.withName(voter).send({
+    const tx = await this.contract.methods.withVoter(voter).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
+    return this;
+  }
+
+  /**
+   * append a community supervisor
+   *
+   * @param supervisor the wallet address
+   *
+   * @returns Builder - this contract
+   */
+  async withCommunitySupervisor(supervisor: string): Promise<Builder> {
+    this.logger.info(`withCommunitySupervisor ${supervisor}`);
+    const tx = await this.contract.methods.withCommunitySupervisor(supervisor).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });

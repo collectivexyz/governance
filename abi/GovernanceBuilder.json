@@ -1,6 +1,22 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_sFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_mStorageFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_govFactory",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -122,6 +138,37 @@
       }
     ],
     "name": "GovernanceContractInitialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "class",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "version",
+        "type": "uint32"
+      }
+    ],
+    "name": "GovernanceContractWithCommunityClass",
     "type": "event"
   },
   {
@@ -299,37 +346,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "class",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "version",
-        "type": "uint32"
-      }
-    ],
-    "name": "GovernanceContractwithCommunityClass",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -411,19 +427,6 @@
   },
   {
     "inputs": [],
-    "name": "_governanceFactoryProxy",
-    "outputs": [
-      {
-        "internalType": "contract GovernanceFactoryProxy",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "_metaStorageFactory",
     "outputs": [
       {
@@ -437,36 +440,10 @@
   },
   {
     "inputs": [],
-    "name": "_metaStorageFactoryProxy",
-    "outputs": [
-      {
-        "internalType": "contract MetaStorageFactoryProxy",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "_storageFactory",
     "outputs": [
       {
         "internalType": "contract StorageFactory",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_storageFactoryProxy",
-    "outputs": [
-      {
-        "internalType": "contract StorageFactoryProxy",
         "name": "",
         "type": "address"
       }
@@ -602,29 +579,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_governanceAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_storageAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_metaAddr",
-        "type": "address"
-      }
-    ],
-    "name": "upgrade",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "version",
     "outputs": [
@@ -726,55 +680,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_gasUsed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_baseFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "withGasRebate",
-    "outputs": [
-      {
-        "internalType": "contract GovernanceBuilder",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "_name",
         "type": "bytes32"
       }
     ],
     "name": "withName",
-    "outputs": [
-      {
-        "internalType": "contract GovernanceBuilder",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_supervisor",
-        "type": "address"
-      }
-    ],
-    "name": "withSupervisor",
     "outputs": [
       {
         "internalType": "contract GovernanceBuilder",
