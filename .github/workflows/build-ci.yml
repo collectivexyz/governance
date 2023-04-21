@@ -1,0 +1,25 @@
+name: Build Docker Image
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - "*"
+
+jobs:
+  check:
+    strategy:
+      fail-fast: true
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Docker build, lint and run tests
+        run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
