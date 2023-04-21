@@ -39,6 +39,9 @@ import { parseIntOrThrow } from '../system/version';
 
 import { CBuilder as Builder } from '../community/cbuilder';
 
+/**
+ * CommunityBuilder implementation
+ */
 class CommunityBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'CommunityBuilder.json';
 
