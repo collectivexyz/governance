@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: true
       
-    name: npmjs    
+    name: npmjs
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,6 +36,6 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - name: npm publish (npmjs)
-      run: |
-        docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
-        docker run -e NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
+        run: |
+          docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
+          docker run -e NPM_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} -e NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN_AUTOMATION }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
