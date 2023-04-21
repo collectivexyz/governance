@@ -10,16 +10,16 @@ on:
       - "*"
 
 jobs:
-  check:
+  build:
     strategy:
       fail-fast: true
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Docker build, lint and run tests
-        run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
+    docker:
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        - name: Docker build, lint and run tests
+          run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}

@@ -6,10 +6,10 @@ on:
       - "*"
 
 jobs:
-  check:
+  build:
     strategy:
       fail-fast: true
-    build:
+    docker:
       runs-on: ubuntu-latest
       permissions:
         contents: read
