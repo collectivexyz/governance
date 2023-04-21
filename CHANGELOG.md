@@ -1,3 +1,7 @@
+# 0.8.3
+
+* grant write permission for release
+
 # 0.8.2
 
 * fix build
