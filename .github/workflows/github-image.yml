@@ -9,23 +9,24 @@ jobs:
   build:
     strategy:
       fail-fast: true
-    docker:
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-        - name: Docker build, lint and run tests
-          run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
-        - name: configure github
-          uses: actions/setup-node@v3
-          with:
-            node-version: '18.x'
-            registry-url: 'https://npm.pkg.github.com'
-        - name: npm publish (github)
-          run: |
-            if [ -f ${NPM_CONFIG_USERCONFIG} ]; then cp -f ${NPM_CONFIG_USERCONFIG} .npmrc; else exit 1; fi
-            docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
-            docker run -e NPM_TOKEN=${{ secrets.GITHUB_TOKEN }} -e NODE_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
+      
+    name: github package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Docker build, lint and run tests
+        run: docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
+      - name: configure github
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: npm publish (github)
+        run: |
+          if [ -f ${NPM_CONFIG_USERCONFIG} ]; then cp -f ${NPM_CONFIG_USERCONFIG} .npmrc; else exit 1; fi
+          docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
+          docker run -e NPM_TOKEN=${{ secrets.GITHUB_TOKEN }} -e NODE_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
