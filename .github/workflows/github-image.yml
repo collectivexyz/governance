@@ -1,14 +1,9 @@
-name: Build GitHub Image
+name: Docker Build GitHub Image
+
 on:
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - '*'
-  release:
-    types: [created]
+    tags:
+      - "*"
 
 jobs:
   build:
@@ -26,10 +21,8 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://npm.pkg.github.com'
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
       - name: npm publish (github)
         run: |
           if [ -f ${NPM_CONFIG_USERCONFIG} ]; then cp -f ${NPM_CONFIG_USERCONFIG} .npmrc; else exit 1; fi
           docker build . --file Dockerfile --tag ${{github.event.repository.name}}-${GITHUB_SHA::10}
           docker run -e NPM_TOKEN=${{ secrets.GITHUB_TOKEN }} -e NODE_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }} --rm -t ${{github.event.repository.name}}-${GITHUB_SHA::10} npm publish --access public
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
