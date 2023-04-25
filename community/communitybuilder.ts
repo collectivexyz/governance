@@ -143,7 +143,42 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asClosedErc721Community(project: string, tokenThreshold: number): Promise<Builder> {
     this.logger.info('asClosedErc721Community');
-    const tx = await this.contract.methods.asClosedErc721Community(project).send({
+    const tx = await this.contract.methods.asClosedErc721Community(project, tokenThreshold).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
+    return this;
+  }
+
+  /**
+   * build ERC-20 community
+   *
+   * @param project the token contract address
+   *
+   * @returns Builder - this contract
+   */
+  async asErc20Community(project: string): Promise<Builder> {
+    this.logger.info('asErc20Community');
+    const tx = await this.contract.methods.asErc20Community(project).send({
+      from: this.wallet.getAddress(),
+      gas: this.gas,
+    });
+    this.logger.info(tx);
+    return this;
+  }
+
+  /**
+   * build Closed ERC-20 community
+   *
+   * @param project the token contract address
+   * @param tokenThreshold the number of tokens required to propose
+   *
+   * @returns Builder - this contract
+   */
+  async asClosedErc20Community(project: string, tokenThreshold: number): Promise<Builder> {
+    this.logger.info('asClosedErc20Community');
+    const tx = await this.contract.methods.asClosedErc20Community(project, tokenThreshold).send({
       from: this.wallet.getAddress(),
       gas: this.gas,
     });

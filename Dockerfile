@@ -6,8 +6,8 @@ ARG PROJECT=governance
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
     apt install -y -q --no-install-recommends \
-    sudo git \
-    npm build-essential git curl \
+    sudo git curl gnupg2 coreutils \
+    npm build-essential \
     ca-certificates apt-transport-https \
     ripgrep && \
     apt clean && \
