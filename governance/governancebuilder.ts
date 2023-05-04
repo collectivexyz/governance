@@ -44,15 +44,6 @@ import { parseIntOrThrow } from '../system/version';
 export class GovernanceBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'GovernanceBuilder.json';
 
-  private readonly wallet: Wallet;
-  private readonly gas: number;
-
-  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
-    super(abiPath, GovernanceBuilder.ABI_NAME, contractAddress, web3);
-    this.wallet = wallet;
-    this.gas = gas;
-  }
-
   /**
    * get the contract name
    * @returns string - contract anme
@@ -77,10 +68,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async aGovernance(): Promise<Builder> {
     this.logger.info('Governance Builder Started');
-    const tx = await this.contract.methods.aGovernance().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.aGovernance().send();
     this.logger.info(tx);
     return this;
   }
@@ -94,10 +82,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
   async withName(name: string): Promise<Builder> {
     this.logger.info(`withName ${name}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.withName(encodedName).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withName(encodedName).send();
     this.logger.info(tx);
     return this;
   }
@@ -110,10 +95,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async withUrl(url: string): Promise<Builder> {
     this.logger.info(`withUrl ${url}`);
-    const tx = await this.contract.methods.withUrl(url).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withUrl(url).send();
     this.logger.info(tx);
     return this;
   }
@@ -126,10 +108,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async withDescription(desc: string): Promise<Builder> {
     this.logger.info(`withDescription ${desc}`);
-    const tx = await this.contract.methods.withDescription(desc).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withDescription(desc).send();
     this.logger.info(tx);
     return this;
   }
@@ -143,10 +122,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async withSupervisor(supervisor: string): Promise<Builder> {
     this.logger.info(`withSupervisor ${supervisor}`);
-    const tx = await this.contract.methods.withSupervisor(supervisor).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withSupervisor(supervisor).send();
     this.logger.info(tx);
     return this;
   }
@@ -159,10 +135,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async withCommunityClassAddress(voterClass: string): Promise<Builder> {
     this.logger.info(`withCommunityClassAddress ${voterClass}`);
-    const tx = await this.contract.methods.withCommunityClassAddress(voterClass).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withCommunityClassAddress(voterClass).send();
     this.logger.info(tx);
     return this;
   }
@@ -174,10 +147,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    */
   async build(): Promise<string> {
     this.logger.info('Building Governance');
-    const buildTx = await this.contract.methods.build().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const buildTx = await this.contract.methods.build().send();
     this.logger.info(buildTx);
 
     const event: EventData = buildTx.events['GovernanceContractCreated'];

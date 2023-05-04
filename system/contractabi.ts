@@ -48,13 +48,25 @@ export abstract class ContractAbi {
   protected readonly contractAbi: any[];
   public contract: Contract;
 
-  constructor(abiPath: string, abiName: string, contractAddress: string, web3: Web3) {
+  constructor(
+    abiPath: string,
+    abiName: string,
+    contractAddress: string,
+    web3: Web3,
+    from: string,
+    gas: number,
+    gasPriceGwei: string
+  ) {
     this.contractAddress = contractAddress;
     this.web3 = web3;
     const abiFile = pathWithSlash(abiPath) + abiName;
     this.logger.info(`Loading ABI: ${abiFile}`);
     this.contractAbi = loadAbi(abiFile);
-    this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress);
+    this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress, {
+      from: from,
+      gas: gas,
+      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
+    });
     this.logger.info(`Connected to contract at ${contractAddress}`);
   }
 }

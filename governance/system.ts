@@ -41,15 +41,6 @@ import { ContractAbi } from '../system/contractabi';
 export class System extends ContractAbi {
   static ABI_NAME = 'System.json';
 
-  private readonly wallet: Wallet;
-  private readonly gas: number;
-
-  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
-    super(abiPath, System.ABI_NAME, contractAddress, web3);
-    this.wallet = wallet;
-    this.gas = gas;
-  }
-
   /**
    * Create a Collective Governance contract with the specified parameterization
    *
@@ -64,10 +55,7 @@ export class System extends ContractAbi {
   async create(name: string, url: string, description: string, erc721contract: string, quorum: number): Promise<string> {
     this.logger.info(`Create Governance: ${name}, ${url}, ${description}, ${erc721contract}, ${quorum}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const buildTx = await this.contract.methods.create(encodedName, url, description, erc721contract, quorum).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const buildTx = await this.contract.methods.create(encodedName, url, description, erc721contract, quorum).send();
 
     this.logger.debug(buildTx);
 
@@ -100,10 +88,7 @@ export class System extends ContractAbi {
     const encodedName = this.web3.utils.asciiToHex(name);
     const buildTx = await this.contract.methods
       .create(encodedName, url, description, erc721contract, quorum, delay, duration)
-      .send({
-        from: this.wallet.getAddress(),
-        gas: this.gas,
-      });
+      .send();
 
     this.logger.debug(buildTx);
 

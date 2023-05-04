@@ -46,14 +46,6 @@ export class CollectiveStorage extends ContractAbi implements Storage {
    * get the contract name
    * @returns string - contract anme
    */
-  constructor(abiPath: string, contractAddress: string, web3: Web3) {
-    super(abiPath, CollectiveStorage.ABI_NAME, contractAddress, web3);
-  }
-
-  /**
-   * get the contract name
-   * @returns string - contract anme
-   */
   async name(): Promise<string> {
     const name = await this.contract.methods.name().call();
     return name;

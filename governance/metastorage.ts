@@ -39,10 +39,6 @@ import { parseIntOrThrow } from '../system/version';
 export class MetaStorage extends ContractAbi implements Meta {
   static ABI_NAME = 'MetaStorage.json';
 
-  constructor(abiPath: string, contractAddress: string, web3: Web3) {
-    super(abiPath, MetaStorage.ABI_NAME, contractAddress, web3);
-  }
-
   /**
    * get the contract name
    * @returns string - contract anme

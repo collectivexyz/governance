@@ -41,15 +41,6 @@ import { PBuilder as Builder } from '../governance/pbuilder';
 class ProposalBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'ProposalBuilder.json';
 
-  private readonly wallet: Wallet;
-  private readonly gas: number;
-
-  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
-    super(abiPath, ProposalBuilder.ABI_NAME, contractAddress, web3);
-    this.wallet = wallet;
-    this.gas = gas;
-  }
-
   /**
    * get the contract name
    * @returns string - contract anme
@@ -75,10 +66,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async aProposal(): Promise<Builder> {
     this.logger.info('Proposal Builder Started');
-    const tx = await this.contract.methods.aProposal().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.aProposal().send();
     this.logger.info(tx);
     return this;
   }
@@ -95,10 +83,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
   async withChoice(name: string, description: string, transactionId: number): Promise<Builder> {
     this.logger.info(`withChoice ${name}, ${description}, ${transactionId}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.withChoice(encodedName, description, transactionId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withChoice(encodedName, description, transactionId).send();
     this.logger.info(tx);
     return this;
   }
@@ -122,10 +107,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
     scheduleTime: number
   ): Promise<Builder> {
     this.logger.info(`withTransaction ${target}, ${value}, ${signature}, ${_calldata}, ${scheduleTime}`);
-    const tx = await this.contract.methods.withTransaction(target, value, signature, _calldata, scheduleTime).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withTransaction(target, value, signature, _calldata, scheduleTime).send();
     this.logger.info(tx);
     return this;
   }
@@ -136,10 +118,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async withDescription(description: string, url: string): Promise<Builder> {
     this.logger.info(`withDescription ${description}, ${url}`);
-    const tx = await this.contract.methods.withDescription(description, url).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withDescription(description, url).send();
     this.logger.info(tx);
     return this;
   }
@@ -155,10 +134,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
   async withMeta(name: string, value: string): Promise<Builder> {
     this.logger.info(`withMeta ${name}, ${value}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.withMeta(encodedName, value).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withMeta(encodedName, value).send();
     this.logger.info(tx);
     return this;
   }
@@ -172,10 +148,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async withQuorum(quorum: number): Promise<Builder> {
     this.logger.info(`withQuorum ${quorum}`);
-    const tx = await this.contract.methods.withQuorum(quorum).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withQuorum(quorum).send();
     this.logger.info(tx);
     return this;
   }
@@ -189,10 +162,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async withDelay(delay: number): Promise<Builder> {
     this.logger.info(`withDelay ${delay}`);
-    const tx = await this.contract.methods.withDelay(delay).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withDelay(delay).send();
     this.logger.info(tx);
     return this;
   }
@@ -206,10 +176,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async withDuration(duration: number): Promise<Builder> {
     this.logger.info(`withDuration ${duration}`);
-    const tx = await this.contract.methods.withDuration(duration).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withDuration(duration).send();
     this.logger.info(tx);
     return this;
   }
@@ -221,10 +188,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    */
   async build(): Promise<number> {
     this.logger.info('Building Proposal');
-    const buildTx = await this.contract.methods.build().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const buildTx = await this.contract.methods.build().send();
     this.logger.info(buildTx);
 
     const event: EventData = buildTx.events['ProposalBuild'];

@@ -45,15 +45,6 @@ import { CBuilder as Builder } from '../community/cbuilder';
 class CommunityBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'CommunityBuilder.json';
 
-  private readonly wallet: Wallet;
-  private readonly gas: number;
-
-  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
-    super(abiPath, CommunityBuilder.ABI_NAME, contractAddress, web3);
-    this.wallet = wallet;
-    this.gas = gas;
-  }
-
   /**
    * get the contract name
    * @returns string - contract anme
@@ -78,10 +69,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async aCommunity(): Promise<Builder> {
     this.logger.info('Community Builder Started');
-    const tx = await this.contract.methods.aCommunity().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.aCommunity().send();
     this.logger.info(tx);
     return this;
   }
@@ -93,10 +81,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asOpenCommunity(): Promise<Builder> {
     this.logger.info('asOpenCommunity');
-    const tx = await this.contract.methods.asOpenCommunity().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asOpenCommunity().send();
     this.logger.info(tx);
     return this;
   }
@@ -108,10 +93,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asPoolCommunity(): Promise<Builder> {
     this.logger.info('asPoolCommunity');
-    const tx = await this.contract.methods.asPoolCommunity().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asPoolCommunity().send();
     this.logger.info(tx);
     return this;
   }
@@ -125,10 +107,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asErc721Community(project: string): Promise<Builder> {
     this.logger.info('asErc721Community');
-    const tx = await this.contract.methods.asErc721Community(project).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asErc721Community(project).send();
     this.logger.info(tx);
     return this;
   }
@@ -143,10 +122,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asClosedErc721Community(project: string, tokenThreshold: number): Promise<Builder> {
     this.logger.info('asClosedErc721Community');
-    const tx = await this.contract.methods.asClosedErc721Community(project, tokenThreshold).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asClosedErc721Community(project, tokenThreshold).send();
     this.logger.info(tx);
     return this;
   }
@@ -160,10 +136,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asErc20Community(project: string): Promise<Builder> {
     this.logger.info('asErc20Community');
-    const tx = await this.contract.methods.asErc20Community(project).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asErc20Community(project).send();
     this.logger.info(tx);
     return this;
   }
@@ -178,10 +151,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async asClosedErc20Community(project: string, tokenThreshold: number): Promise<Builder> {
     this.logger.info('asClosedErc20Community');
-    const tx = await this.contract.methods.asClosedErc20Community(project, tokenThreshold).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.asClosedErc20Community(project, tokenThreshold).send();
     this.logger.info(tx);
     return this;
   }
@@ -195,10 +165,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withVoter(voter: string): Promise<Builder> {
     this.logger.info(`withVoter ${voter}`);
-    const tx = await this.contract.methods.withVoter(voter).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withVoter(voter).send();
     this.logger.info(tx);
     return this;
   }
@@ -212,10 +179,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withCommunitySupervisor(supervisor: string): Promise<Builder> {
     this.logger.info(`withCommunitySupervisor ${supervisor}`);
-    const tx = await this.contract.methods.withCommunitySupervisor(supervisor).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withCommunitySupervisor(supervisor).send();
     this.logger.info(tx);
     return this;
   }
@@ -229,10 +193,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withWeight(weight: number): Promise<Builder> {
     this.logger.info(`withWeight ${weight}`);
-    const tx = await this.contract.methods.withWeight(weight).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withWeight(weight).send();
     this.logger.info(tx);
     return this;
   }
@@ -246,10 +207,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withQuorum(quorum: number): Promise<Builder> {
     this.logger.info(`withQuorum ${quorum}`);
-    const tx = await this.contract.methods.withQuorum(quorum).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withQuorum(quorum).send();
     this.logger.info(tx);
     return this;
   }
@@ -263,10 +221,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withMinimumVoteDelay(delay: number): Promise<Builder> {
     this.logger.info(`withMinimumVoteDelay ${delay}`);
-    const tx = await this.contract.methods.withMinimumVoteDelay(delay).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withMinimumVoteDelay(delay).send();
     this.logger.info(tx);
     return this;
   }
@@ -280,10 +235,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withMaximumVoteDelay(delay: number): Promise<Builder> {
     this.logger.info(`withMaximumVoteDelay ${delay}`);
-    const tx = await this.contract.methods.withMaximumVoteDelay(delay).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withMaximumVoteDelay(delay).send();
     this.logger.info(tx);
     return this;
   }
@@ -297,10 +249,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withMinimumVoteDuration(duration: number): Promise<Builder> {
     this.logger.info(`withMinimumVoteDuration ${duration}`);
-    const tx = await this.contract.methods.withMinimumVoteDuration(duration).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withMinimumVoteDuration(duration).send();
     this.logger.info(tx);
     return this;
   }
@@ -314,10 +263,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async withMaximumVoteDuration(duration: number): Promise<Builder> {
     this.logger.info(`withMaximumVoteDuration ${duration}`);
-    const tx = await this.contract.methods.withMaximumVoteDuration(duration).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.withMaximumVoteDuration(duration).send();
     this.logger.info(tx);
     return this;
   }
@@ -329,10 +275,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    */
   async build(): Promise<string> {
     this.logger.info('Building Community Class');
-    const buildTx = await this.contract.methods.build().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const buildTx = await this.contract.methods.build().send();
     this.logger.info(buildTx);
 
     const event: EventData = buildTx.events['CommunityClassCreated'];
