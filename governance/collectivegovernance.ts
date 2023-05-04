@@ -50,30 +50,33 @@ export class CollectiveGovernance implements Governance {
 
   public readonly contractAddress: string;
   protected readonly web3: Web3;
-  protected readonly wallet: Wallet;
 
   private readonly contractAbi: any[];
   private readonly contract: Contract;
   private readonly stratAbi: any[];
   private readonly strategy: Contract;
-  private readonly gas: number;
 
-  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number) {
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
     this.contractAddress = contractAddress;
     this.web3 = web3;
-    this.wallet = wallet;
-    this.gas = gas;
-
     const abiFile = pathWithSlash(abiPath) + CollectiveGovernance.ABI_NAME;
     this.logger.info(`Loading ABI: ${abiFile}`);
     this.contractAbi = loadAbi(abiFile);
-    this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress);
+    this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress, {
+      from: wallet.getAddress(),
+      gas: gas,
+      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
+    });
     this.logger.info(`Connected to contract ${this.contractAddress}`);
 
     const stratFile = pathWithSlash(abiPath) + CollectiveGovernance.STRAT_NAME;
     this.logger.info(`Loading ABI: ${stratFile}`);
     this.stratAbi = loadAbi(stratFile);
-    this.strategy = new web3.eth.Contract(this.stratAbi, this.contractAddress);
+    this.strategy = new web3.eth.Contract(this.stratAbi, this.contractAddress, {
+      from: wallet.getAddress(),
+      gas: gas,
+      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
+    });
   }
 
   /**
@@ -101,10 +104,7 @@ export class CollectiveGovernance implements Governance {
    */
   async propose(): Promise<number> {
     this.logger.debug('Propose new vote');
-    const proposeTx = await this.contract.methods.propose().send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const proposeTx = await this.contract.methods.propose().send();
     this.logger.info(proposeTx);
     const event: EventData = proposeTx.events['ProposalCreated'];
     return parseIntOrThrow(event.returnValues['proposalId']);
@@ -120,10 +120,7 @@ export class CollectiveGovernance implements Governance {
   async addChoice(proposalId: number, name: string, description: string, transactionId: number): Promise<number> {
     this.logger.info(`choice: ${proposalId}, ${name}, ${description}, ${transactionId}}`);
     const encodedName = this.web3.utils.asciiToHex(name);
-    const tx = await this.contract.methods.setChoice(proposalId, encodedName, description, transactionId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const tx = await this.contract.methods.setChoice(proposalId, encodedName, description, transactionId).send();
     this.logger.info(tx);
     const event: EventData = tx.events['ProposalChoice'];
     return parseIntOrThrow(event.returnValues['_choiceId']);
@@ -152,10 +149,7 @@ export class CollectiveGovernance implements Governance {
     this.logger.debug(`attach: ${proposalId}, ${target}, ${value}, ${signature}, ${calldata}, ${etaOfLock}`);
     const attachTx = await this.contract.methods
       .attachTransaction(proposalId, target, value, signature, calldata, etaOfLock)
-      .send({
-        from: this.wallet.getAddress(),
-        gas: this.gas,
-      });
+      .send();
     this.logger.info(attachTx);
     const event: EventData = attachTx.events['ProposalTransactionAttached'];
     return parseIntOrThrow(event.returnValues['transactionId']);
@@ -169,10 +163,7 @@ export class CollectiveGovernance implements Governance {
    */
   async configure(proposalId: number, quorum: number): Promise<void> {
     this.logger.debug(`configure vote: ${proposalId}, ${quorum}`);
-    const configureTx = await this.contract.methods.configure(proposalId, quorum).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const configureTx = await this.contract.methods.configure(proposalId, quorum).send();
     this.logger.info(configureTx);
   }
 
@@ -186,10 +177,7 @@ export class CollectiveGovernance implements Governance {
    */
   async configureWithDelay(proposalId: number, quorum: number, requiredDelay: number, requiredDuration: number): Promise<void> {
     this.logger.debug(`configure vote: ${proposalId}, ${quorum}, ${requiredDelay}, ${requiredDuration}`);
-    const configureTx = await this.contract.methods.configure(proposalId, quorum, requiredDelay, requiredDuration).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const configureTx = await this.contract.methods.configure(proposalId, quorum, requiredDelay, requiredDuration).send();
     this.logger.info(configureTx);
   }
 
@@ -209,10 +197,7 @@ export class CollectiveGovernance implements Governance {
    */
   async startVote(proposalId: number): Promise<void> {
     this.logger.debug(`start vote: ${proposalId}`);
-    const openTx = await this.contract.methods.startVote(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const openTx = await this.contract.methods.startVote(proposalId).send();
     this.logger.info(openTx);
   }
 
@@ -223,10 +208,7 @@ export class CollectiveGovernance implements Governance {
    */
   async endVote(proposalId: number): Promise<void> {
     this.logger.debug(`end vote: ${proposalId}`);
-    const endTx = await this.contract.methods.endVote(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const endTx = await this.contract.methods.endVote(proposalId).send();
     this.logger.info(endTx);
   }
 
@@ -237,10 +219,7 @@ export class CollectiveGovernance implements Governance {
    */
   async cancel(proposalId: number): Promise<void> {
     this.logger.debug(`cancel: ${proposalId}`);
-    const endTx = await this.contract.methods.cancel(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const endTx = await this.contract.methods.cancel(proposalId).send();
     this.logger.info(endTx);
   }
 
@@ -251,10 +230,7 @@ export class CollectiveGovernance implements Governance {
    */
   async veto(proposalId: number): Promise<void> {
     this.logger.debug(`veto: ${proposalId}`);
-    const endTx = await this.strategy.methods.veto(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const endTx = await this.strategy.methods.veto(proposalId).send();
     this.logger.info(endTx);
   }
 
@@ -265,10 +241,7 @@ export class CollectiveGovernance implements Governance {
    */
   async voteFor(proposalId: number): Promise<void> {
     this.logger.debug(`vote for: ${proposalId}`);
-    const voteTx = await this.strategy.methods.voteFor(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.voteFor(proposalId).send();
     this.logger.info(voteTx);
   }
 
@@ -280,10 +253,7 @@ export class CollectiveGovernance implements Governance {
    */
   async voteChoice(proposalId: number, choiceId: number): Promise<void> {
     this.logger.debug(`vote choice: ${proposalId} – ${choiceId}`);
-    const voteTx = await this.strategy.methods.voteChoice(proposalId, choiceId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.voteChoice(proposalId, choiceId).send();
     this.logger.info(voteTx);
   }
 
@@ -295,10 +265,7 @@ export class CollectiveGovernance implements Governance {
    */
   async voteForWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`vote for with token: ${tokenId}`);
-    const voteTx = await this.strategy.methods.voteFor(proposalId, tokenId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.voteFor(proposalId, tokenId).send();
     this.logger.info(voteTx);
   }
 
@@ -309,10 +276,7 @@ export class CollectiveGovernance implements Governance {
    */
   async voteAgainst(proposalId: number): Promise<void> {
     this.logger.debug(`vote against: ${proposalId}`);
-    const voteTx = await this.strategy.methods.voteAgainst(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.voteAgainst(proposalId).send();
     this.logger.info(voteTx);
   }
 
@@ -324,10 +288,7 @@ export class CollectiveGovernance implements Governance {
    */
   async voteAgainstWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`vote against with token: ${proposalId}, ${tokenId}`);
-    const voteTx = await this.strategy.methods.voteAgainst(proposalId, tokenId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.voteAgainst(proposalId, tokenId).send();
     this.logger.info(voteTx);
   }
 
@@ -338,10 +299,7 @@ export class CollectiveGovernance implements Governance {
    */
   async abstainFrom(proposalId: number): Promise<void> {
     this.logger.debug(`abstainFrom: ${proposalId}`);
-    const voteTx = await this.strategy.methods.abstainFrom(proposalId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.abstainFrom(proposalId).send();
     this.logger.info(voteTx);
   }
 
@@ -352,10 +310,7 @@ export class CollectiveGovernance implements Governance {
    */
   async abstainWithToken(proposalId: number, tokenId: number): Promise<void> {
     this.logger.debug(`abstain for ${proposalId}, ${tokenId}`);
-    const voteTx = await this.strategy.methods.abstainFrom(proposalId, tokenId).send({
-      from: this.wallet.getAddress(),
-      gas: this.gas,
-    });
+    const voteTx = await this.strategy.methods.abstainFrom(proposalId, tokenId).send();
     this.logger.info(voteTx);
   }
 

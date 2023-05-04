@@ -44,6 +44,10 @@ import { parseIntOrThrow } from '../system/version';
 export class GovernanceBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'GovernanceBuilder.json';
 
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, GovernanceBuilder.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
+
   /**
    * get the contract name
    * @returns string - contract anme

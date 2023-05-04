@@ -36,6 +36,8 @@ import { LoggerFactory } from '../system/logging';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 
+import { Wallet } from '../system/wallet';
+
 /**
  * Abstract class implementation based on a ABI specification
  */
@@ -53,7 +55,7 @@ export abstract class ContractAbi {
     abiName: string,
     contractAddress: string,
     web3: Web3,
-    from: string,
+    wallet: Wallet,
     gas: number,
     gasPriceGwei: string
   ) {
@@ -63,7 +65,7 @@ export abstract class ContractAbi {
     this.logger.info(`Loading ABI: ${abiFile}`);
     this.contractAbi = loadAbi(abiFile);
     this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress, {
-      from: from,
+      from: wallet.getAddress(),
       gas: gas,
       gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
     });

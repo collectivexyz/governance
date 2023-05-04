@@ -41,6 +41,10 @@ import { PBuilder as Builder } from '../governance/pbuilder';
 class ProposalBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'ProposalBuilder.json';
 
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, ProposalBuilder.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
+
   /**
    * get the contract name
    * @returns string - contract anme

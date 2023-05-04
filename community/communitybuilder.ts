@@ -45,6 +45,10 @@ import { CBuilder as Builder } from '../community/cbuilder';
 class CommunityBuilder extends ContractAbi implements Builder {
   static ABI_NAME = 'CommunityBuilder.json';
 
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, CommunityBuilder.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
+
   /**
    * get the contract name
    * @returns string - contract anme

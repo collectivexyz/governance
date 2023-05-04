@@ -32,12 +32,18 @@
  */
 
 import Web3 from 'web3';
+
+import { Wallet } from '../system/wallet';
 import { ContractAbi } from '../system/contractabi';
 import { Meta } from './meta';
 import { parseIntOrThrow } from '../system/version';
 
 export class MetaStorage extends ContractAbi implements Meta {
   static ABI_NAME = 'MetaStorage.json';
+
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, MetaStorage.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
 
   /**
    * get the contract name

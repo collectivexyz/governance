@@ -41,6 +41,10 @@ import { ContractAbi } from '../system/contractabi';
 export class System extends ContractAbi {
   static ABI_NAME = 'System.json';
 
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, System.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
+
   /**
    * Create a Collective Governance contract with the specified parameterization
    *

@@ -31,12 +31,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Web3 from 'web3';
-import { EventData } from 'web3-eth-contract';
-import { Wallet } from '../system/wallet';
-import { ContractAbi } from '../system/contractabi';
-import { parseIntOrThrow } from '../system/version';
-
 interface PBuilder {
   /**
    * get the contract name

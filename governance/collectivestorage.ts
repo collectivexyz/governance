@@ -32,6 +32,8 @@
  */
 
 import Web3 from 'web3';
+
+import { Wallet } from '../system/wallet';
 import { ContractAbi } from '../system/contractabi';
 import { Storage } from './storage';
 import { parseIntOrThrow } from '../system/version';
@@ -41,6 +43,10 @@ import { parseIntOrThrow } from '../system/version';
  */
 export class CollectiveStorage extends ContractAbi implements Storage {
   static ABI_NAME = 'Storage.json';
+
+  constructor(abiPath: string, contractAddress: string, web3: Web3, wallet: Wallet, gas: number, gasPriceGwei: string) {
+    super(abiPath, CollectiveStorage.ABI_NAME, contractAddress, web3, wallet, gas, gasPriceGwei);
+  }
 
   /**
    * get the contract name
