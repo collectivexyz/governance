@@ -34,8 +34,8 @@
     "typedoc": "0.23.22"
   },
   "dependencies": {
-    "web3": "1.9.0",
-    "web3-eth-contract": "1.9.0",
+    "web3": "1.8.1",
+    "web3-eth-contract": "1.8.1",
     "pino": "8.7.0"
   },
   "files": [
