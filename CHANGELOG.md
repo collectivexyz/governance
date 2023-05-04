@@ -1,3 +1,7 @@
+# 0.8.4 (2023-05-04)
+
+* web3 to 1.9.0 - having issues with 1.8.2
+
 # 0.8.3
 
 * grant write permission for release
