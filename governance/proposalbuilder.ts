@@ -69,7 +69,7 @@ class ProposalBuilder extends ContractAbi implements Builder {
    * @returns Builder - this contract
    */
   async aProposal(): Promise<Builder> {
-    this.logger.info('Proposal Builder Started');
+    this.logger.info('aProposal');
     const tx = await this.contract.methods.aProposal().send();
     this.logger.info(tx);
     return this;

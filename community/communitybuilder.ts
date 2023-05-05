@@ -72,7 +72,7 @@ class CommunityBuilder extends ContractAbi implements Builder {
    * @returns Builder - this contract
    */
   async aCommunity(): Promise<Builder> {
-    this.logger.info('Community Builder Started');
+    this.logger.info('aCommunity()');
     const tx = await this.contract.methods.aCommunity().send();
     this.logger.info(tx);
     return this;

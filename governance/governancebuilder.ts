@@ -71,7 +71,7 @@ export class GovernanceBuilder extends ContractAbi implements Builder {
    * @returns Builder - this contract
    */
   async aGovernance(): Promise<Builder> {
-    this.logger.info('Governance Builder Started');
+    this.logger.info('aGovernance()');
     const tx = await this.contract.methods.aGovernance().send();
     this.logger.info(tx);
     return this;
