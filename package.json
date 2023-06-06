@@ -9,8 +9,8 @@
   "types": "dist/index.d.ts",
   "packageManager": "yarn@3.2.0",
   "scripts": {
-    "prettier:check": "prettier --check \"(governance|system)/**/*.ts\"",
-    "prettier:fix": "prettier --write \"(governance|system)/**/*.ts\" \"(governance|system)/**/*.ts\"",
+    "prettier:check": "prettier --check \"(community|governance|system|treasury)/**/*.ts\"",
+    "prettier:fix": "prettier --write \"(community|governance|system|treasury)/**/*.ts\" \"(community|governance|system|treasury)/**/*.ts\"",
     "lint": "eslint --ext .ts",
     "build": "tsc",
     "prepublishOnly": "yarn build",
@@ -36,6 +36,7 @@
   "dependencies": {
     "web3": "1.10.0",
     "web3-eth-contract": "1.10.0",
+    "web3-core": "1.10.0",
     "pino": "8.7.0"
   },
   "files": [

@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, collective
+ * Copyright (c) 2023, collective
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,43 +31,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Web3 from 'web3';
-import { Account } from 'web3-core';
-import { getKeyAsEthereumKey } from '../system/abi';
-
-/**
- * Abstraction for an Ethereum wallet
- */
-export interface Wallet {
-  getAddress(): string;
-  getAccount(): Account;
-  connect(): void;
-}
-
-/**
- * Implementation of an Ethereum wallet
- */
-export class EthWallet implements Wallet {
-  private readonly walletAddress;
-  private readonly account: Account;
-  private readonly web3: Web3;
-
-  constructor(privateKey: string, web3: Web3) {
-    this.walletAddress = getKeyAsEthereumKey(privateKey);
-    this.web3 = web3;
-    this.account = this.web3.eth.accounts.privateKeyToAccount(this.walletAddress);
-  }
-
-  connect(): void {
-    this.web3.eth.accounts.wallet.add(this.account);
-    this.web3.eth.defaultAccount = this.account.address;
-  }
-
-  getAddress(): string {
-    return this.account.address;
-  }
-
-  getAccount(): Account {
-    return this.account;
-  }
+/// standardized transaction map
+export interface Transaction {
+  target: string;
+  value: string;
+  signature: string;
+  _calldata: string;
+  scheduleTime: number;
 }

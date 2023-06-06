@@ -1,5 +1,5 @@
 {
-  "entryPoints": ["governance/index.ts", "system/index.ts", "community/index.ts"],
+  "entryPoints": ["community/index.ts", "governance/index.ts", "system/index.ts", "treasury/index.ts"],
   "exclude": ["**/node_modules/**/*.ts", "**/*+(spec).ts", "**/*/index.d.ts", "**/dist/**/*.(js|ts)"],
   "excludeExternals": true
 }

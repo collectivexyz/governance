@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, collective
+ * Copyright (c) 2023, collective
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,42 +32,21 @@
  */
 
 import Web3 from 'web3';
-import { Account } from 'web3-core';
-import { getKeyAsEthereumKey } from '../system/abi';
+import { Transaction } from '../governance/transaction';
+import { Wallet } from '../system';
 
-/**
- * Abstraction for an Ethereum wallet
- */
-export interface Wallet {
-  getAddress(): string;
-  getAccount(): Account;
-  connect(): void;
+export function getTransactionHash(web3: Web3, transaction: Transaction): string {
+  const utils = Web3.utils;
+  const transactionMsg = web3.eth.abi.encodeParameters(
+    ['address', 'uint256', 'string', 'bytes', 'uint256'],
+    [transaction.target, transaction.value, transaction.signature, transaction._calldata, transaction.scheduleTime]
+  );
+  const transactionHash = utils.keccak256(transactionMsg);
+  return transactionHash;
 }
 
-/**
- * Implementation of an Ethereum wallet
- */
-export class EthWallet implements Wallet {
-  private readonly walletAddress;
-  private readonly account: Account;
-  private readonly web3: Web3;
-
-  constructor(privateKey: string, web3: Web3) {
-    this.walletAddress = getKeyAsEthereumKey(privateKey);
-    this.web3 = web3;
-    this.account = this.web3.eth.accounts.privateKeyToAccount(this.walletAddress);
-  }
-
-  connect(): void {
-    this.web3.eth.accounts.wallet.add(this.account);
-    this.web3.eth.defaultAccount = this.account.address;
-  }
-
-  getAddress(): string {
-    return this.account.address;
-  }
-
-  getAccount(): Account {
-    return this.account;
-  }
+export function getEthSignature(wallet: Wallet, transactionHash: string) {
+  const account = wallet.getAccount();
+  const transactionSignature = account.sign(transactionHash);
+  return transactionSignature.signature;
 }

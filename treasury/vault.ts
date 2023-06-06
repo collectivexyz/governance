@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, collective
+ * Copyright (c) 2023, collective
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,43 +31,63 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Web3 from 'web3';
-import { Account } from 'web3-core';
-import { getKeyAsEthereumKey } from '../system/abi';
-
 /**
- * Abstraction for an Ethereum wallet
+ * interface to Collective Treasury
  */
-export interface Wallet {
-  getAddress(): string;
-  getAccount(): Account;
-  connect(): void;
-}
+export interface Vault {
+  /**
+   * send a depsoit to the treasury
+   *
+   * @param quantity the amount to deposit
+   */
+  deposit(quantity: number): Promise<void>;
 
-/**
- * Implementation of an Ethereum wallet
- */
-export class EthWallet implements Wallet {
-  private readonly walletAddress;
-  private readonly account: Account;
-  private readonly web3: Web3;
+  /**
+   * approve a withdrawal from the treasury
+   *
+   * @param to the recipient of the funds
+   * @param quantity the amount to approve
+   */
+  approve(to: string, quantity: number): Promise<void>;
 
-  constructor(privateKey: string, web3: Web3) {
-    this.walletAddress = getKeyAsEthereumKey(privateKey);
-    this.web3 = web3;
-    this.account = this.web3.eth.accounts.privateKeyToAccount(this.walletAddress);
-  }
+  /**
+   * approve a withdrawal from the treasury and sign in a single
+   * transaction
+   *
+   * @param to the recipient of the funds
+   * @param quantity the amount to approve
+   * @param signature the array of signatures
+   */
+  approveMultiSig(to: string, quantity: number, signature: string[]): Promise<void>;
 
-  connect(): void {
-    this.web3.eth.accounts.wallet.add(this.account);
-    this.web3.eth.defaultAccount = this.account.address;
-  }
+  /**
+   * withdraw available funds from the treasury to your account
+   */
+  pay(): Promise<void>;
 
-  getAddress(): string {
-    return this.account.address;
-  }
+  /**
+   * withdraw available funds from the treasury to the specified account
+   *
+   * @param to the destination account for the funds
+   */
+  transferTo(to: string): Promise<void>;
 
-  getAccount(): Account {
-    return this.account;
-  }
+  /**
+   * cancel approval for the recipient
+   *
+   * @param to the destination account for the funds
+   */
+  cancel(to: string): Promise<void>;
+
+  /**
+   * retrieve the approved balance for the specified account
+   *
+   * @param from the account to query
+   */
+  balance(from: string): Promise<number>;
+
+  /**
+   * retrieve the contract balance for the treasury
+   */
+  treasuryBalance(): Promise<number>;
 }
