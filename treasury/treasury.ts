@@ -76,11 +76,12 @@ export class Treasury extends ContractAbi implements Vault {
    *
    * @param to the recipient of the funds
    * @param quantity the amount to approve
+   * @param scheduleTime the time to schedule the withdrawal
    * @param signature the array of signatures
    */
-  async approveMultiSig(to: string, quantity: number, signature: string[]): Promise<void> {
-    this.logger.info(`approveMultiSig(${to}, ${quantity}, ${signature})`);
-    const tx = await this.contract.methods.approveMultiSig(to, quantity, signature).send();
+  async approveMulti(to: string, quantity: number, scheduleTime: number, signature: string[]): Promise<void> {
+    this.logger.info(`approveMulti(${to}, ${quantity}, ${scheduleTime}, ${signature})`);
+    const tx = await this.contract.methods.approveMulti(to, quantity, scheduleTime, signature).send();
     this.logger.info(tx);
   }
 

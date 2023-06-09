@@ -56,9 +56,10 @@ export interface Vault {
    *
    * @param to the recipient of the funds
    * @param quantity the amount to approve
+   * @param scheduleTime the time to schedule the withdrawal
    * @param signature the array of signatures
    */
-  approveMultiSig(to: string, quantity: number, signature: string[]): Promise<void>;
+  approveMulti(to: string, quantity: number, scheduleTime: number, signature: string[]): Promise<void>;
 
   /**
    * withdraw available funds from the treasury to your account

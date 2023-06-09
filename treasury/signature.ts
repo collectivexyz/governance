@@ -34,19 +34,26 @@
 import Web3 from 'web3';
 import { Transaction } from '../governance/transaction';
 import { Wallet } from '../system';
+import { LoggerFactory } from '../system/logging';
+
+const logger = LoggerFactory.getLogger(module.filename);
 
 export function getTransactionHash(web3: Web3, transaction: Transaction): string {
-  const utils = Web3.utils;
+  const calldata = transaction._calldata !== '' ? transaction._calldata : '0x';
+  logger.debug(
+    `target: ${transaction.target}, value: ${transaction.value}, signature: ${transaction.signature}, calldata: ${calldata}, scheduleTime: ${transaction.scheduleTime}`
+  );
   const transactionMsg = web3.eth.abi.encodeParameters(
     ['address', 'uint256', 'string', 'bytes', 'uint256'],
-    [transaction.target, transaction.value, transaction.signature, transaction._calldata, transaction.scheduleTime]
+    [transaction.target, transaction.value, transaction.signature, calldata, transaction.scheduleTime]
   );
-  const transactionHash = utils.keccak256(transactionMsg);
+  const transactionHash = web3.utils.keccak256(transactionMsg);
+  logger.debug('transactionHash: {}', transactionHash);
   return transactionHash;
 }
 
-export function getEthSignature(wallet: Wallet, transactionHash: string) {
+export async function getEthSignature(wallet: Wallet, transactionHash: string) {
   const account = wallet.getAccount();
-  const transactionSignature = account.sign(transactionHash);
+  const transactionSignature = await account.sign(transactionHash);
   return transactionSignature.signature;
 }
