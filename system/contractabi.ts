@@ -48,6 +48,8 @@ export abstract class ContractAbi {
 
   protected readonly web3: Web3;
   protected readonly contractAbi: any[];
+  protected readonly gas: number;
+  protected readonly gasPriceGwei: string;
   public contract: Contract;
 
   constructor(
@@ -64,11 +66,17 @@ export abstract class ContractAbi {
     const abiFile = pathWithSlash(abiPath) + abiName;
     this.logger.info(`Loading ABI: ${abiFile}`);
     this.contractAbi = loadAbi(abiFile);
+    this.gas = gas;
+    this.gasPriceGwei = gasPriceGwei;
     this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress, {
       from: wallet.getAddress(),
       gas: gas,
-      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
+      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei')
     });
+    this.contract.defaultBlock = 'latest';
+    this.contract.transactionBlockTimeout = 5;
+    this.contract.transactionConfirmationBlocks = 1;
+    this.contract.transactionPollingTimeout = 120;
     this.logger.info(`Connected to contract at ${contractAddress}`);
   }
 }
