@@ -71,12 +71,12 @@ export abstract class ContractAbi {
     this.contract = new web3.eth.Contract(this.contractAbi, this.contractAddress, {
       from: wallet.getAddress(),
       gas: gas,
-      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei')
+      gasPrice: web3.utils.toWei(gasPriceGwei, 'gwei'),
     });
     this.contract.defaultBlock = 'latest';
-    this.contract.transactionBlockTimeout = 5;
+    this.contract.transactionBlockTimeout = 10;
     this.contract.transactionConfirmationBlocks = 1;
-    this.contract.transactionPollingTimeout = 120;
+    this.contract.transactionPollingTimeout = 300;
     this.logger.info(`Connected to contract at ${contractAddress}`);
   }
 }
