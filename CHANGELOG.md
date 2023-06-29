@@ -1,3 +1,7 @@
+# 0.8.12 (2023-06-29)
+
+* add Treasury, TreasuryBuilder and Vault
+
 # 0.8.11 (2023-05-10)
 
 * web3 1.10.0
