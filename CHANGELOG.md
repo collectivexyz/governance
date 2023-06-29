@@ -1,4 +1,4 @@
-# 0.8.12 (2023-06-29)
+# 0.8.14 (2023-06-29)
 
 * add Treasury, TreasuryBuilder and Vault
 
